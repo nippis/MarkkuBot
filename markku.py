@@ -28,7 +28,7 @@ def thiskillsthemarkku(bot, update):
 
     exit()
 
-
+# Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
 def darkroom(bot, update):
     printlog(update, "darkroom")
 
@@ -39,20 +39,16 @@ def darkroom(bot, update):
         sensor_data = json.loads(url.read().decode())
 
         value_light = 0
-        value_door = 0
         isDarkroomPopulated = False
 
+        # JSON härössä muodossa, sen takia teemme näin. Esimerkki:
+        #   {"entries": [{"value": 191, "sensor": "light1", "inserted": "2018-07-27T16:18:43.589Z"}]}
         for sensor in sensor_data["entries"]:
             if sensor["sensor"] == "light1":
                 value_light = sensor["value"]
 
-            elif sensor["sensor"] == "door1":
-                value_door = sensor["value"]
-
         if value_light > 100:
             isDarkroomPopulated = True
-        else:
-            isDarkroomPopulated = False
 
         if isDarkroomPopulated:
             reply = "Joku on pimiöllä :O\n"
