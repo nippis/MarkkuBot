@@ -74,6 +74,7 @@ def help(bot, update):
             "/toptenmsg - Chatin kovimmat viestittelijät\n"\
             "/toptenkiitos - Chatin kovimmat kiitostelijat\n"\
             "/noutaja - Postaa satunnaisen noutajakuvan\n"\
+            "/protip - Antaa ammatti valo kuvaus vinkin!\n"\
             "\n" \
             "Botin koodit: @eltsu7 ja @kulmajaba\n" \
             "Valosensorit ja siihen koodit: @anttimoi"
