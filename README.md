@@ -32,6 +32,4 @@ ei kuitenkaan valvota koodissa, joten ole skarppina datan tallennusoperaatioissa
 
 ## Huomattavaa
 
-Tyhjän data.jsonin pitää olla muodossa '{}'
-
 Muista uuden botin privacy mode pois. Moden päivityksen jälkeen botti pitää potkia ja lisätä uudestaan
