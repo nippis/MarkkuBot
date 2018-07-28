@@ -17,17 +17,7 @@ def start(bot, update):
 
     bot.send_message(chat_id=chat_id, text="Woof woof")
 
-
-def thiskillsthemarkku(bot, update):
-    printlog(update, "kill")
-
-    # TODO: killswitch ei muuten toimi. se pysäyttää markun kyllä
-    # mutta se ei ota tulevia viestejä bufferiin
-
-    db_client.close()
-
-    exit()
-
+    
 # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
 def darkroom(bot, update):
     printlog(update, "darkroom")
@@ -338,7 +328,6 @@ def handlers(updater):
     dp.add_handler(CommandHandler('toptenmsg', topten_messages))
     dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
     dp.add_handler(CommandHandler('protip', protip))
-    dp.add_handler(CommandHandler('thiskillsthemarkku', thiskillsthemarkku))
     dp.add_handler(CommandHandler('kysymys', camera_versus))
     dp.add_handler(MessageHandler(Filters.sticker, msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, msg_text))
