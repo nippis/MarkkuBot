@@ -298,18 +298,7 @@ def camera_versus_text():
     # Painotettu lista random pickeihin
 
     global camera_list
-    weighted_camera_list = []
-    
-    for group in camera_list:
-        if group == "Common":
-            for camera in camera_list[group]:
-                weighted_camera_list.extend([camera] * 10)
-        if group == "Medium":
-            for camera in camera_list[group]:
-                weighted_camera_list.extend([camera] * 3) 
-        if group == "Rare":
-            for camera in camera_list[group]:
-                weighted_camera_list.append(camera)
+    weighted_camera_list = camera_list["Common"] * 10 + camera_list["Medium"] * 3 + camera_list["Rare"]
             
     return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
     
