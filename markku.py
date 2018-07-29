@@ -374,8 +374,6 @@ protip_list = masterlist["Tips"]
 camera_list = masterlist["Cameras"]
 
 settings = file_read("settings.json")
-sticker_list = file_read("sticker_list_kiitos.json")
-protip_list = file_read("tips.json")
 
 # TODO: failaa jos ei saada yhteyttä
 db_client = MongoClient("localhost", 27017, serverSelectionTimeoutMS=1000)
