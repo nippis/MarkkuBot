@@ -296,25 +296,22 @@ def camera_versus(bot, update):
 
 def camera_versus_text():
     # Painotettu lista random pickeihin
-    camera_list = [
-        "Canon",
-        "Nikon"
-    ] * 10 + [
-        "Sony",
-        "Pentax",
-        "Olympus"
-    ] * 3 + [
-        "Hasselblad",
-        "Leica",
-        "Konica",
-        "Zenza Bronica",
-        "Rollei",
-        "Mamiya",
-        "Fujifilm",
-        "iPhone"
-    ]
 
-    return "{} vai {}?".format(random.choice(camera_list), random.choice(camera_list))
+    global camera_list
+    weighted_camera_list = []
+    
+    for group in camera_list:
+        if group == "Common":
+            for camera in camera_list[group]:
+                weighted_camera_list.extend([camera] * 10)
+        if group == "Medium":
+            for camera in camera_list[group]:
+                weighted_camera_list.extend([camera] * 3) 
+        if group == "Rare":
+            for camera in camera_list[group]:
+                weighted_camera_list.append(camera)
+            
+    return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
     
 def handlers(updater):
     dp = updater.dispatcher
@@ -370,6 +367,11 @@ def main():
     handlers(updater)
 
     updater.start_polling()
+
+masterlist = file_read("masterlist.json")
+sticker_list = masterlist["Stickers"]
+protip_list = masterlist["Tips"]
+camera_list = masterlist["Cameras"]
 
 settings = file_read("settings.json")
 sticker_list = file_read("sticker_list_kiitos.json")
