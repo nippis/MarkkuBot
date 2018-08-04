@@ -6,6 +6,7 @@ import json
 from urllib.request import Request, urlopen
 import random
 from pymongo import ASCENDING, MongoClient
+import re
 
 # TODO: var -> jotkut vakiomuuttujat tähän
 
@@ -202,6 +203,8 @@ def msg_text(bot, update):
 
     message = update.message.text.lower()
 
+    parse_and_count(update)
+
     lotto = random.randint(1, 201)
 
     if "kiitos" in message:
@@ -231,6 +234,18 @@ def msg_text(bot, update):
     elif "filmi" in message and lotto < 11:
         bot.send_message(chat_id=chat_id, text="Filmi best")
 
+def parse_and_count(update):
+    # user_id, chat_id = get_ids(update)
+    text = update.message.text.upper()
+    
+    # muuttaa kaikki paitsi kirjaimet ja numerot välilyönneiksi
+    parsed_text = re.sub('[^a-zA-Z0-9 öÖäÄ\n.]', ' ', text)
+
+    # splittaa välilyöntien kohdalta
+    split_text = parsed_text.split(" ")
+
+    # poistaa listasta yhden ja nollan pituiset alkiot
+    split_text = [i for i in split_text if len(i) > 1]
 
 def msg_sticker(bot, update):
     printlog(update, "sticker")
