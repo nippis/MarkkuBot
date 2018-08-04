@@ -7,6 +7,7 @@ from urllib.request import Request, urlopen
 import random
 from pymongo import ASCENDING, MongoClient
 import re
+from collections import Counter
 
 # TODO: var -> jotkut vakiomuuttujat tähän
 
@@ -235,8 +236,13 @@ def msg_text(bot, update):
         bot.send_message(chat_id=chat_id, text="Filmi best")
 
 def parse_and_count(update):
-    # user_id, chat_id = get_ids(update)
+    user_id, chat_id = get_ids(update)
     text = update.message.text.upper()
+
+    # usernameksi laitetaan 'Not found' jos sitä ei ole
+    username = "Not found"
+    if update.message.from_user.username is not None:
+        username = update.message.from_user.username
     
     # muuttaa kaikki paitsi kirjaimet ja numerot välilyönneiksi
     parsed_text = re.sub('[^a-zA-Z0-9 öÖäÄ\n.]', ' ', text)
@@ -246,6 +252,22 @@ def parse_and_count(update):
 
     # poistaa listasta yhden ja nollan pituiset alkiot
     split_text = [i for i in split_text if len(i) > 1]
+
+    # laskee listasta sanat ja tallentaa sen muotoon {"sana1": sanaMäärä1, "sana2": sanaMäärä2 ... }
+    countIncrementer = Counter(split_text)
+
+    words_collection.update_one(
+        { "chat_id": chat_id, "user_id": user_id },
+        { 
+            "$inc": countIncrementer,
+            "$setOnInsert": {
+                "chat_title": update.message.chat.title,
+                "username": username,
+            }
+        },
+        True
+    )
+
 
 def msg_sticker(bot, update):
     printlog(update, "sticker")
@@ -383,5 +405,6 @@ settings = file_read("settings.json")
 db_client = MongoClient("localhost", 27017, serverSelectionTimeoutMS=1000)
 db = db_client[settings["db_name"]]
 chats_collection = db[settings["collection_name"]]
+words_collection = db[settings["words_collection"]]
 
 main()
