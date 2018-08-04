@@ -243,6 +243,11 @@ def parse_and_count(update):
     username = "Not found"
     if update.message.from_user.username is not None:
         username = update.message.from_user.username
+
+    # chat titleksi laitetaan 'Private' jos sitä ei ole (priva chätti)
+    chat_title = "Private"
+    if update.message.chat.title is not None:
+        chat_title = update.message.chat.title
     
     # muuttaa kaikki paitsi kirjaimet ja numerot välilyönneiksi
     parsed_text = re.sub('[^a-zA-Z0-9 öÖäÄ\n.]', ' ', text)
@@ -256,12 +261,13 @@ def parse_and_count(update):
     # laskee listasta sanat ja tallentaa sen muotoon {"sana1": sanaMäärä1, "sana2": sanaMäärä2 ... }
     countIncrementer = Counter(split_text)
 
+    # TODO wordit omaan dictiin
     words_collection.update_one(
         { "chat_id": chat_id, "user_id": user_id },
         { 
-            "$inc": countIncrementer,
+            #"$inc": countIncrementer,
             "$setOnInsert": {
-                "chat_title": update.message.chat.title,
+                "chat_title": chat_title,
                 "username": username,
             }
         },
