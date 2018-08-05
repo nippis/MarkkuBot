@@ -250,7 +250,7 @@ def parse_and_count(update):
         chat_title = update.message.chat.title
     
     # muuttaa kaikki paitsi kirjaimet ja numerot välilyönneiksi
-    parsed_text = re.sub('[^a-zA-Z0-9 öÖäÄ\n.]', ' ', text)
+    parsed_text = re.sub('[^a-zA-Z0-9 öÖäÄ\n]', ' ', text)
 
     # splittaa välilyöntien kohdalta
     split_text = parsed_text.split(" ")
