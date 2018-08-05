@@ -259,13 +259,17 @@ def parse_and_count(update):
     split_text = [i for i in split_text if len(i) > 1]
 
     # laskee listasta sanat ja tallentaa sen muotoon {"sana1": sanaMäärä1, "sana2": sanaMäärä2 ... }
-    countIncrementer = Counter(split_text)
+    wordCount = Counter(split_text)
 
-    # TODO wordit omaan dictiin
+    # lisää joka sanan alkuun "words."
+    countIncrement = {}
+    for i in wordCount:
+        countIncrement["words." + i] = wordCount[i]
+
     words_collection.update_one(
         { "chat_id": chat_id, "user_id": user_id },
         { 
-            #"$inc": countIncrementer,
+            "$inc": countIncrement,
             "$setOnInsert": {
                 "chat_title": chat_title,
                 "username": username,
