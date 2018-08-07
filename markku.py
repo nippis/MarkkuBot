@@ -1,13 +1,15 @@
 # coding: utf-8
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, BaseFilter
-import logging
 import json
-from urllib.request import Request, urlopen
+import logging
 import random
-from pymongo import ASCENDING, MongoClient
 import re
 from collections import Counter
+from os import environ
+from urllib.request import Request, urlopen
+
+from pymongo import ASCENDING, MongoClient
+from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater)
 
 # TODO: var -> jotkut vakiomuuttujat tähän
 
@@ -399,7 +401,7 @@ def file_read(filename):
 
 
 def main():
-    updater = Updater(token=settings["tg_token"])
+    updater = Updater(token=tg_token)
     handlers(updater)
 
     updater.start_polling()
@@ -409,12 +411,16 @@ sticker_list = masterlist["Stickers"]
 protip_list = masterlist["Tips"]
 camera_list = masterlist["Cameras"]
 
-settings = file_read("settings.json")
+tg_token = environ["TG_TOKEN"]
+db_name = environ["DB_NAME"]
+chats_coll_name = environ["CHATS_COLL_NAME"]
+words_coll_name = environ["WORDS_COLL_NAME"]
+mongo_port = environ["MONGO_PORT"].replace("tcp://", "")
 
 # TODO: failaa jos ei saada yhteyttä
-db_client = MongoClient("localhost", 27017, serverSelectionTimeoutMS=1000)
-db = db_client[settings["db_name"]]
-chats_collection = db[settings["collection_name"]]
-words_collection = db[settings["words_collection"]]
+db_client = MongoClient(mongo_port, serverSelectionTimeoutMS=1000)
+db = db_client[db_name]
+chats_collection = db[chats_coll_name]
+words_collection = db[words_coll_name]
 
 main()

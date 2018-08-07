@@ -1,0 +1,10 @@
+version: "3"
+services:
+  markkubot:
+    image: kulmajaba/markkubot:2.1.0
+    env_file: .env
+    restart: always
+  mongo:
+    image: mongo:3.6.6
+    env_file: .env
+    restart: always
