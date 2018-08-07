@@ -20,7 +20,7 @@ Markun saa ajoon komennolla `docker run -it --link=joku_kontti:mongo --rm --env-
 
 Buildataan image, tägätään image jotta se saadaan yhdistettyä Docker Hub:n repoon, pushataan image.
 
-HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
+HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push --tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
 
 ```
 docker build -t markkubot:x.x.x .
