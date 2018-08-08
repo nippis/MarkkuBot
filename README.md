@@ -16,17 +16,21 @@ Markun Docker-image kasataan komentamalla `docker build -t markkubot:x.x.x .`, j
 
 Markun saa ajoon komennolla `docker run -it --link=joku_kontti:mongo --rm --env-file=.env markkubot:0.0.1`. `-it` käynnistää kontin interaktiivisessa tilassa, eli logit näkyy. `--link` yhdistää Mongo-kontin Markku-konttiin, eli sille parametrina kontin_nimi:mongo (nimi selviää ajamalla `docker ps`, esim. "eloquent_shtern"). `--env-file` antaa Markku-kontille tarvittavat ympäristömuuttujat, mukaanlukien Mongon IP:n ja portin.
 
-### 🚧 WIP 🚧 Live
+Kehittäessä voi myös ajaa Markkua docker composen avulla, mutta se muuttaa tiettyjä juttuja. Testaus käytännössä Tuotantojulkaisun mukaisesti, mutta deploylle:lle annetaan `docker-compose-dev.yml` joka lisää stackiin mongo-express -web-UI:n MongoDB datan tutkailuun. **MONGO-EXPRESS EI SAA MENNÄ TUOTANTOON.** Mongo-expressin käli löytyy osoitteesta http://localhost:8081
+
+### 🚧 WIP 🚧 Tuotanto
 
 Buildataan image, tägätään image jotta se saadaan yhdistettyä Docker Hub:n repoon, pushataan image.
-
-HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push --tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
 
 ```
 docker build -t markkubot:x.x.x .
 docker tag markkubot:x.x.x <docker username>/markkubot:x.x.x
 docker push <docker username>/markkubot:x.x.x
 ```
+
+HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push --tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
+
+Tuotantokoneelle MarkkuBot-repon `docker-compose.yml` ja `docker stack deploy -c docker-compose-dev.yml markku`
 
 ### .env
 
@@ -39,17 +43,19 @@ CHATS_COLL_NAME=<tietokannan chat-collectionin nimi>
 WORDS_COLL_NAME=<tietokannan sana-collectionin nimi>
 ```
 
-env-tiedostossa Mongolle tärkeät jutut (ei käytetä kehityksessä, koska Mongo on jo käynnissä. docker-compose hyödyntää):
+## Huomattavaa
 
-```
-MONGO_INITDB_ROOT_USERNAME=root
-MONGO_INITDB_ROOT_PASSWORD=example
-```
+Muista uuden botin privacy mode pois. Moden päivityksen jälkeen botti pitää potkia ja lisätä uudestaan
 
+## ROADMAP
 
-## ⚠️ Deprecated ⚠️ MongoDB
+* Mongon tieturvallisuutta voi parantaa käyttäjätunnareilla melko helposti
+* Githubista automatisoidut Docker-buildit: https://docs.docker.com/docker-hub/github/#github-organizations
+* Tuotantoon joku haistelija, joka hakee uusimman buildin Docker Hubista ja käynnistää Markun uudelleen
 
-Nykyinen Mongo-setti ei ole kovin tietoturvallinen, mutta defaulttina ei myöskään salli ulkopuolisia yhteyksiä vaan pelkät localhost-yhteydet.
+## ⚠️ Deprecated ⚠️ Vanha Markku ja MongoDB
+
+Periaatteessa Markkua voisi edelleen ajaa vanhaan tapaan, mutta ei kannata. Settings.json on korvattu env-tiedostolla
 
 ### Uuden MongoDB:n pystytys
 
@@ -69,12 +75,8 @@ mongod --dbpath <projektikansion polku>/db
 Esimerkki MongoDB-dokumentista löytyy `data-template.json`:sta. Tämän mallin toteutumista
 ei kuitenkaan valvota koodissa, joten ole skarppina datan tallennusoperaatioissa
 
-## ⚠️ Deprecated ⚠️ Uuden Markun pystytys
+### Markun pystytys
 
 * Nimeä `settings-template.json` -> `settings.json` ja päivitä asetukset
 * Asenna MongoDB ja varmista, että se pyörähtää koneella. Markku ei ole vastuussa Mongon käynnistämisestä, vaan tietokannan tulee olla käynnissä Markun käynnistyessä.
 * Asenna python-rippuvuudet `requirements.txt`:n avulla
-
-## Huomattavaa
-
-Muista uuden botin privacy mode pois. Moden päivityksen jälkeen botti pitää potkia ja lisätä uudestaan
