@@ -30,7 +30,7 @@ docker push <docker username>/markkubot:x.x.x
 
 HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push --tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
 
-Tuotantokoneelle MarkkuBot-repon `docker-compose.yml` ja `docker stack deploy -c docker-compose-dev.yml markku`
+Tuotantokoneelle MarkkuBot-repon `docker-compose.yml` ja `docker stack deploy -c docker-compose.yml markku`
 
 ### .env
 
