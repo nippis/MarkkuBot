@@ -415,10 +415,9 @@ tg_token = environ["TG_TOKEN"]
 db_name = environ["DB_NAME"]
 chats_coll_name = environ["CHATS_COLL_NAME"]
 words_coll_name = environ["WORDS_COLL_NAME"]
-mongo_port = environ["MONGO_PORT"].replace("tcp://", "")
 
 # TODO: failaa jos ei saada yhteyttä
-db_client = MongoClient(mongo_port, serverSelectionTimeoutMS=1000)
+db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
 db = db_client[db_name]
 chats_collection = db[chats_coll_name]
 words_collection = db[words_coll_name]
