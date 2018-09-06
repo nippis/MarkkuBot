@@ -9,8 +9,6 @@ services:
     image: mongo:3.6.6
     ports:
       - "27017:27017"
-      - "443:443"
-      - "80:80"
     volumes:
     - data-volume:/data/db
 volumes:
