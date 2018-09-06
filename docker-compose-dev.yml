@@ -1,0 +1,21 @@
+version: "3"
+services:
+  markkubot:
+    image: kulmajaba/markkubot:2.0.3
+    env_file: .env
+    depends_on:
+    - mongo
+  mongo:
+    image: mongo:3.6.6
+    ports:
+      - "27017:27017"
+      - "443:443"
+      - "80:80"
+    volumes:
+    - data-volume:/data/db
+  mongo-express:
+    image: mongo-express:0.49
+    ports:
+      - "8081:8081"
+volumes:
+  data-volume:
