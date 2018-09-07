@@ -65,6 +65,8 @@ def help(bot, update):
             "/toptenkiitos - Chatin kovimmat kiitostelijat\n"\
             "/noutaja - Postaa satunnaisen noutajakuvan\n"\
             "/protip - Antaa ammatti valo kuvaus vinkin!\n"\
+            "/blacklist - Poista omat tietosi Markun tietokannasta ja estä uusien tallentaminen, lähetä privana Markulle\n"\
+            "/unblacklist - Salli omien tietojesi tallentaminen blacklist-komennon jälkeen, lähetä privana Markulle\n"\
             "\n" \
             "Botin koodit: @eltsu7 ja @kulmajaba\n" \
             "Valosensorit ja siihen koodit: @anttimoi"
@@ -350,6 +352,12 @@ def camera_versus_text():
     weighted_camera_list = camera_list["Common"] * 10 + camera_list["Medium"] * 3 + camera_list["Rare"]
             
     return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
+
+def blacklist(bot, update):
+    user_id, chat_id = get_ids(update)
+
+def unblacklist(bot, update):
+    user_id, chat_id = get_ids(update)
     
 def handlers(updater):
     dp = updater.dispatcher
@@ -364,6 +372,8 @@ def handlers(updater):
     dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
     dp.add_handler(CommandHandler('protip', protip))
     dp.add_handler(CommandHandler('kysymys', camera_versus))
+    dp.add_handler(CommandHandler('blacklist', blacklist))
+    dp.add_handler(CommandHandler('unblacklist', unblacklist))
     dp.add_handler(MessageHandler(Filters.sticker, msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, msg_text))
     dp.add_handler(MessageHandler(Filters.photo, msg_photo))
