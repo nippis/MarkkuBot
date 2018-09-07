@@ -9,7 +9,8 @@ from os import environ
 from urllib.request import Request, urlopen
 
 from pymongo import ASCENDING, MongoClient
-from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
 # TODO: var -> jotkut vakiomuuttujat tähän
 
@@ -354,7 +355,48 @@ def camera_versus_text():
     return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
 
 def blacklist(bot, update):
-    user_id, chat_id = get_ids(update)
+    printlog(update, "blacklist")
+
+    if (update.message.chat.type != "private"):
+        return
+    
+    keyboard = [[InlineKeyboardButton("Ei (No)", callback_data="false"),
+                 InlineKeyboardButton("Kyllä (Yes)", callback_data="true")]]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    update.message.reply_text("Haluatko, että kaikki henkilöivät tietosi poistetaan Markun tietokannasta," \
+                              "ja käyttäjäsi lisätään \"älä seuraa\"-listalle?\n\n" \
+                              "Do you want to delete all of your personifiable information from Markku's database" \
+                              "and add your user to the \"do not track\" list?",
+                              reply_markup=reply_markup)
+
+def blacklist_confirm(bot, update):
+    query = update.callback_query
+
+    username = query.from_user.username
+    user_id = query.from_user.id
+
+    print("Type: blacklist_confirm", "\nUsername: ", username)
+
+    if (query.data == "false"):
+        bot.edit_message_text(text="Käyttäjätietojen poistaminen peruttu.\n" \
+                                   "The deletion of user information has been cancelled.",
+                              chat_id=query.message.chat_id,
+                              message_id=query.message.message_id)
+        return
+    
+    bot.edit_message_text(text="Käyttäjätiedot poistettu, ja käyttäjää ei seurata jatkossa.\n" \
+                                "User information deleted, and the user will not be tracked.",
+                            chat_id=query.message.chat_id,
+                            message_id=query.message.message_id)
+
+    # Poista kaikki käyttäjän dokumentit
+    chats_collection.delete_many(
+        { "user_id": user_id }
+    )
+
+    # TODO: blacklistaa
 
 def unblacklist(bot, update):
     user_id, chat_id = get_ids(update)
@@ -374,6 +416,7 @@ def handlers(updater):
     dp.add_handler(CommandHandler('kysymys', camera_versus))
     dp.add_handler(CommandHandler('blacklist', blacklist))
     dp.add_handler(CommandHandler('unblacklist', unblacklist))
+    dp.add_handler(CallbackQueryHandler(blacklist_confirm))
     dp.add_handler(MessageHandler(Filters.sticker, msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, msg_text))
     dp.add_handler(MessageHandler(Filters.photo, msg_photo))
