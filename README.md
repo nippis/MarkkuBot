@@ -34,13 +34,14 @@ Tuotantokoneelle MarkkuBot-repon `docker-compose.yml` ja `docker stack deploy -c
 
 ### .env
 
-env-tiedostossa Markulle tärkeät jutut:
+env-tiedostossa Markulle tärkeät jutut (keksi sopivat nimet itse, esim. `markku_chats_collection` jne.):
 
 ```
 TG_TOKEN=<telegramin bot token>
 DB_NAME=<tietokannan nimi>
 CHATS_COLL_NAME=<tietokannan chat-collectionin nimi>
 WORDS_COLL_NAME=<tietokannan sana-collectionin nimi>
+BLACKLIST_COLL_NAME=<tietokannan blacklist-collectionin nimi>
 ```
 
 ## Huomattavaa
