@@ -358,7 +358,10 @@ def blacklist(bot, update):
     printlog(update, "blacklist")
 
     if (update.message.chat.type != "private"):
+        # TODO: sano että laittaa privana
         return
+    
+    # TODO: tsekkaa onko jo blacklistilla
     
     keyboard = [[InlineKeyboardButton("Ei (No)", callback_data="false"),
                  InlineKeyboardButton("Kyllä (Yes)", callback_data="true")]]
@@ -396,7 +399,12 @@ def blacklist_confirm(bot, update):
         { "user_id": user_id }
     )
 
-    # TODO: blacklistaa
+    blacklist_collection.insert_one({
+        "user_id": user_id
+    })
+    blacklist_collection.create_index([
+        ("user_id", ASCENDING)
+    ], unique=True)
 
 def unblacklist(bot, update):
     user_id, chat_id = get_ids(update)
@@ -468,11 +476,13 @@ tg_token = environ["TG_TOKEN"]
 db_name = environ["DB_NAME"]
 chats_coll_name = environ["CHATS_COLL_NAME"]
 words_coll_name = environ["WORDS_COLL_NAME"]
+blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
 # TODO: failaa jos ei saada yhteyttä
 db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
 db = db_client[db_name]
 chats_collection = db[chats_coll_name]
 words_collection = db[words_coll_name]
+blacklist_collection = db[blacklist_coll_name]
 
 main()
