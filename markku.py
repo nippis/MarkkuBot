@@ -87,6 +87,10 @@ def get_ids(update):
 def count_and_write(update, var):
     user_id, chat_id = get_ids(update)
 
+    # Älä laske blacklistattuja
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        return
+
     # TODO: siirrä setOnInsertin sisälle
     # TODO: tsekkaa onko nimi Not Found, tsekkaa onko käyttäjänimi muuttunu järkeväks, jos on niin päivitä
     username = "Not found"
@@ -205,8 +209,6 @@ def protip(bot, update):
 def msg_text(bot, update):
     printlog(update, "text")
 
-    # TODO: Ignoree jos on blacklist
-
     _, chat_id = get_ids(update)
     count_and_write(update, "messages")
 
@@ -246,6 +248,11 @@ def msg_text(bot, update):
 
 def parse_and_count(update):
     user_id, chat_id = get_ids(update)
+
+    # Älä laske blacklistattuja
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        return
+
     text = update.message.text.upper()
 
     # usernameksi laitetaan 'Not found' jos sitä ei ole
@@ -366,10 +373,10 @@ def camera_versus_text():
 def blacklist(bot, update):
     printlog(update, "blacklist")
 
-    user_id, chat_id = get_ids(update)
+    user_id, _ = get_ids(update)
 
     if (update.message.chat.type != "private"):
-        update.message.reply_text("Ole hyvä ja laita tämä pyyntö yksityisviestillä\n" \
+        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä\n" \
                                   "Please send this request via private message")
         return
     
