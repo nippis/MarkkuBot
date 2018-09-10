@@ -9,6 +9,7 @@ from os import environ
 from urllib.request import Request, urlopen
 
 from pymongo import ASCENDING, MongoClient
+from pymongo import errors as MongoErrors
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
@@ -204,6 +205,8 @@ def protip(bot, update):
 def msg_text(bot, update):
     printlog(update, "text")
 
+    # TODO: Ignoree jos on blacklist
+
     _, chat_id = get_ids(update)
     count_and_write(update, "messages")
 
@@ -239,6 +242,7 @@ def msg_text(bot, update):
 
     elif "filmi" in message and lotto < 11:
         bot.send_message(chat_id=chat_id, text="Filmi best")
+
 
 def parse_and_count(update):
     user_id, chat_id = get_ids(update)
@@ -305,6 +309,8 @@ def msg_gif(bot, update):
 def stats(bot, update):
     printlog(update, "stats")
 
+    # TODO: käsittely jos ei löydy
+
     user_id, chat_id = get_ids(update)
     count_and_write(update, "commands")
 
@@ -336,6 +342,7 @@ def status_new_members(bot, update):
 
     update.message.reply_text(msg)
 
+
 def camera_versus(bot, update):
     printlog(update, "camera versus")
 
@@ -346,6 +353,7 @@ def camera_versus(bot, update):
     
     bot.send_message(chat_id=chat_id, text=msg)
 
+
 def camera_versus_text():
     # Painotettu lista random pickeihin
 
@@ -354,14 +362,21 @@ def camera_versus_text():
             
     return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
 
+
 def blacklist(bot, update):
     printlog(update, "blacklist")
 
+    user_id, chat_id = get_ids(update)
+
     if (update.message.chat.type != "private"):
-        # TODO: sano että laittaa privana
+        update.message.reply_text("Ole hyvä ja laita tämä pyyntö yksityisviestillä\n" \
+                                  "Please send this request via private message")
         return
     
-    # TODO: tsekkaa onko jo blacklistilla
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        update.message.reply_text("Tietosi on jo poistettu, eikä sinua seurata.\n" \
+                                  "Your information is already deleted and you are not tracked.")
+        return
     
     keyboard = [[InlineKeyboardButton("Ei (No)", callback_data="false"),
                  InlineKeyboardButton("Kyllä (Yes)", callback_data="true")]]
@@ -373,6 +388,7 @@ def blacklist(bot, update):
                               "Do you want to delete all of your personifiable information from Markku's database" \
                               "and add your user to the \"do not track\" list?",
                               reply_markup=reply_markup)
+
 
 def blacklist_confirm(bot, update):
     query = update.callback_query
@@ -398,16 +414,36 @@ def blacklist_confirm(bot, update):
     chats_collection.delete_many(
         { "user_id": user_id }
     )
+    words_collection.delete_many(
+        { "user_id": user_id }
+    )
 
-    blacklist_collection.insert_one({
-        "user_id": user_id
-    })
-    blacklist_collection.create_index([
-        ("user_id", ASCENDING)
-    ], unique=True)
+    try:
+        blacklist_collection.insert_one({
+            "user_id": user_id
+        })
+        blacklist_collection.create_index([
+            ("user_id", ASCENDING)
+        ], unique=True)
+    except MongoErrors.DuplicateKeyError:
+        print("User {} already blacklisted".format(username))
+
 
 def unblacklist(bot, update):
-    user_id, chat_id = get_ids(update)
+    user_id, _ = get_ids(update)
+
+    deleteResult = blacklist_collection.delete_one(
+        { "user_id": user_id }
+    )
+
+    if (deleteResult.deleted_count != 0):
+        update.message.reply_text("Markku seuraa sinua taas.\n" \
+                                  "Markku is tracking you again.\n\n" \
+                                  "*sniff sniff* Woof!")
+    else:
+        update.message.reply_text("Et ole Markun \"älä seuraa\"-listalla.\n" \
+                                  "You are not on Markku's \"do not track\" list.")
+
     
 def handlers(updater):
     dp = updater.dispatcher
