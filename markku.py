@@ -9,7 +9,9 @@ from os import environ
 from urllib.request import Request, urlopen
 
 from pymongo import ASCENDING, MongoClient
-from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater)
+from pymongo import errors as MongoErrors
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
 # TODO: var -> jotkut vakiomuuttujat tähän
 
@@ -65,6 +67,8 @@ def help(bot, update):
             "/toptenkiitos - Chatin kovimmat kiitostelijat\n"\
             "/noutaja - Postaa satunnaisen noutajakuvan\n"\
             "/protip - Antaa ammatti valo kuvaus vinkin!\n"\
+            "/blacklist - Poista omat tietosi Markun tietokannasta ja estä uusien tallentaminen, lähetä privana Markulle\n"\
+            "/unblacklist - Salli omien tietojesi tallentaminen blacklist-komennon jälkeen, lähetä privana Markulle\n"\
             "\n" \
             "Botin koodit: @eltsu7 ja @kulmajaba\n" \
             "Valosensorit ja siihen koodit: @anttimoi"
@@ -82,6 +86,10 @@ def get_ids(update):
 
 def count_and_write(update, var):
     user_id, chat_id = get_ids(update)
+
+    # Älä laske blacklistattuja
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        return
 
     # TODO: siirrä setOnInsertin sisälle
     # TODO: tsekkaa onko nimi Not Found, tsekkaa onko käyttäjänimi muuttunu järkeväks, jos on niin päivitä
@@ -237,8 +245,14 @@ def msg_text(bot, update):
     elif "filmi" in message and lotto < 11:
         bot.send_message(chat_id=chat_id, text="Filmi best")
 
+
 def parse_and_count(update):
     user_id, chat_id = get_ids(update)
+
+    # Älä laske blacklistattuja
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        return
+
     text = update.message.text.upper()
 
     # usernameksi laitetaan 'Not found' jos sitä ei ole
@@ -303,9 +317,15 @@ def stats(bot, update):
     printlog(update, "stats")
 
     user_id, chat_id = get_ids(update)
+    # Älä poista tai muuta paikkaa ellet korjaa samalla, miten Markku käsittelee käyttäjän jota ei ole blacklistattu,
+    # mutta jolla ei ole vielä mitään statseja
     count_and_write(update, "commands")
 
     user = chats_collection.find_one({ "chat_id": chat_id, "user_id": user_id })
+
+    if (user == None):
+        update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
+                                  "Markku does not track you. Use the command /unblacklist to enable tracking.")
 
     user_data = user["count"]
 
@@ -333,6 +353,7 @@ def status_new_members(bot, update):
 
     update.message.reply_text(msg)
 
+
 def camera_versus(bot, update):
     printlog(update, "camera versus")
 
@@ -343,6 +364,7 @@ def camera_versus(bot, update):
     
     bot.send_message(chat_id=chat_id, text=msg)
 
+
 def camera_versus_text():
     # Painotettu lista random pickeihin
 
@@ -350,6 +372,94 @@ def camera_versus_text():
     weighted_camera_list = camera_list["Common"] * 10 + camera_list["Medium"] * 3 + camera_list["Rare"]
             
     return "{} vai {}?".format(random.choice(weighted_camera_list), random.choice(weighted_camera_list))
+
+
+def blacklist(bot, update):
+    printlog(update, "blacklist")
+
+    user_id, _ = get_ids(update)
+
+    if (update.message.chat.type != "private"):
+        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä.\n" \
+                                  "Please send this request via private message.")
+        return
+    
+    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+        update.message.reply_text("Tietosi on jo poistettu, eikä sinua seurata.\n" \
+                                  "Your information is already deleted and you are not tracked.")
+        return
+    
+    keyboard = [[InlineKeyboardButton("Ei (No)", callback_data="false"),
+                 InlineKeyboardButton("Kyllä (Yes)", callback_data="true")]]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    update.message.reply_text("Haluatko, että kaikki henkilöivät tietosi poistetaan Markun tietokannasta," \
+                              "ja käyttäjäsi lisätään \"älä seuraa\"-listalle?\n\n" \
+                              "Do you want to delete all of your personifiable information from Markku's database" \
+                              "and add your user to the \"do not track\" list?",
+                              reply_markup=reply_markup)
+
+
+def blacklist_confirm(bot, update):
+    query = update.callback_query
+
+    username = query.from_user.username
+    user_id = query.from_user.id
+
+    print("Type: blacklist_confirm", "\nUsername: ", username)
+
+    if (query.data == "false"):
+        bot.edit_message_text(text="Käyttäjätietojen poistaminen peruttu.\n" \
+                                   "The deletion of user information has been cancelled.",
+                              chat_id=query.message.chat_id,
+                              message_id=query.message.message_id)
+        return
+    
+    bot.edit_message_text(text="Käyttäjätiedot poistettu, ja käyttäjää ei seurata jatkossa.\n" \
+                                "User information deleted, and the user will not be tracked.",
+                            chat_id=query.message.chat_id,
+                            message_id=query.message.message_id)
+
+    # Poista kaikki käyttäjän dokumentit
+    chats_collection.delete_many(
+        { "user_id": user_id }
+    )
+    words_collection.delete_many(
+        { "user_id": user_id }
+    )
+
+    try:
+        blacklist_collection.insert_one({
+            "user_id": user_id
+        })
+        blacklist_collection.create_index([
+            ("user_id", ASCENDING)
+        ], unique=True)
+    except MongoErrors.DuplicateKeyError:
+        print("User {} already blacklisted".format(username))
+
+
+def unblacklist(bot, update):
+    user_id, _ = get_ids(update)
+
+    if (update.message.chat.type != "private"):
+        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä\n" \
+                                  "Please send this request via private message")
+        return
+
+    deleteResult = blacklist_collection.delete_one(
+        { "user_id": user_id }
+    )
+
+    if (deleteResult.deleted_count != 0):
+        update.message.reply_text("Markku seuraa sinua taas.\n" \
+                                  "Markku is tracking you again.\n\n" \
+                                  "*sniff sniff* Woof!")
+    else:
+        update.message.reply_text("Et ole Markun \"älä seuraa\"-listalla.\n" \
+                                  "You are not on Markku's \"do not track\" list.")
+
     
 def handlers(updater):
     dp = updater.dispatcher
@@ -364,6 +474,9 @@ def handlers(updater):
     dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
     dp.add_handler(CommandHandler('protip', protip))
     dp.add_handler(CommandHandler('kysymys', camera_versus))
+    dp.add_handler(CommandHandler('blacklist', blacklist))
+    dp.add_handler(CommandHandler('unblacklist', unblacklist))
+    dp.add_handler(CallbackQueryHandler(blacklist_confirm))
     dp.add_handler(MessageHandler(Filters.sticker, msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, msg_text))
     dp.add_handler(MessageHandler(Filters.photo, msg_photo))
@@ -415,11 +528,13 @@ tg_token = environ["TG_TOKEN"]
 db_name = environ["DB_NAME"]
 chats_coll_name = environ["CHATS_COLL_NAME"]
 words_coll_name = environ["WORDS_COLL_NAME"]
+blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
 # TODO: failaa jos ei saada yhteyttä
 db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
 db = db_client[db_name]
 chats_collection = db[chats_coll_name]
 words_collection = db[words_coll_name]
+blacklist_collection = db[blacklist_coll_name]
 
 main()
