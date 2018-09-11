@@ -316,12 +316,16 @@ def msg_gif(bot, update):
 def stats(bot, update):
     printlog(update, "stats")
 
-    # TODO: käsittely jos ei löydy
-
     user_id, chat_id = get_ids(update)
+    # Älä poista tai muuta paikkaa ellet korjaa samalla, miten Markku käsittelee käyttäjän jota ei ole blacklistattu,
+    # mutta jolla ei ole vielä mitään statseja
     count_and_write(update, "commands")
 
     user = chats_collection.find_one({ "chat_id": chat_id, "user_id": user_id })
+
+    if (user == None):
+        update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
+                                  "Markku does not track you. Use the command /unblacklist to enable tracking.")
 
     user_data = user["count"]
 
@@ -376,8 +380,8 @@ def blacklist(bot, update):
     user_id, _ = get_ids(update)
 
     if (update.message.chat.type != "private"):
-        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä\n" \
-                                  "Please send this request via private message")
+        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä.\n" \
+                                  "Please send this request via private message.")
         return
     
     if (blacklist_collection.find_one({ "user_id": user_id }) != None):
@@ -438,6 +442,11 @@ def blacklist_confirm(bot, update):
 
 def unblacklist(bot, update):
     user_id, _ = get_ids(update)
+
+    if (update.message.chat.type != "private"):
+        update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä\n" \
+                                  "Please send this request via private message")
+        return
 
     deleteResult = blacklist_collection.delete_one(
         { "user_id": user_id }

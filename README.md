@@ -20,6 +20,8 @@ Kehittäessä voi myös ajaa Markkua docker composen avulla, mutta se muuttaa ti
 
 ### 🚧 WIP 🚧 Tuotanto
 
+*Tähän saadaan toivottavasti automatisointi jatkossa, eli Githubin commitista tai tagista automaattinen buildi Docker Hubiin ja sieltä ajoon. Siihen asti mennään nykyisellä manuaalisemmalla tavalla.*
+
 Buildataan image, tägätään image jotta se saadaan yhdistettyä Docker Hub:n repoon, pushataan image.
 
 ```
