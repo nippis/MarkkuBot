@@ -1,7 +1,7 @@
-version: "3"
+version: "3.0.0"
 services:
   markkubot:
-    image: kulmajaba/markkubot:2.0.3
+    image: kulmajaba/markkubot:3.0.0
     env_file: .env
     depends_on:
     - mongo
