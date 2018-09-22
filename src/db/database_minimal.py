@@ -1,5 +1,5 @@
 class DatabaseMinimal:
-    def in_blacklist(self):
+    def in_blacklist(self, user_id):
         return True
 
     def add_blacklist(self, user_id):
