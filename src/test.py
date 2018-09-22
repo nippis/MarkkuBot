@@ -10,6 +10,9 @@ from test.dummy_user import DummyUser
 
 from core.get_ids import get_ids
 
+from db.database_abstraction import DatabaseAbstraction
+from db.database_minimal import DatabaseMinimal
+
 from command_handlers.start import start
 
 update_generic = DummyUpdate(chat=DummyChat('609'), from_user=DummyUser('1377', 'kurkkumopo'))
@@ -30,4 +33,10 @@ class TestStart(unittest.TestCase):
 
 if __name__ == '__main__':
     print("Yksikkötestit")
+
+    db_min = DatabaseMinimal()
+    dba = DatabaseAbstraction(db_min)
+
+    print('Tieto kanta', dba.in_blacklist())
+
     unittest.main()
