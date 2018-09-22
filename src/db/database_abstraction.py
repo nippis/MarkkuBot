@@ -1,10 +1,17 @@
+# Luokan poikkeukset
+class DatabaseError(Exception):
+    pass
+
+class DuplicateKeyError(DatabaseError):
+    pass
+
 # Bridge-patternin abstraktio-luokka
 class DatabaseAbstraction:
     def __init__(self, imp):
         self.imp = imp  # Toteuttava luokka
 
-    def in_blacklist(self):
-        val = self.imp.in_blacklist()
+    def in_blacklist(self, user_id):
+        val = self.imp.in_blacklist(user_id)
 
         if isinstance(val, bool):
             return val
@@ -19,6 +26,9 @@ class DatabaseAbstraction:
 
     def increment_counter(self, user_id, chat_id, counter, amount):
         self.imp.increment_counter(user_id, chat_id, counter, amount)
+
+    def get_counter_user(self, user_id, chat_id, counter):
+        return self.imp.get_counter_user(user_id, chat_id, counter)
 
     def get_counter_top(self, chat_id, counter, top_amount):
         return self.imp.get_counter_top(chat_id, counter, top_amount)
