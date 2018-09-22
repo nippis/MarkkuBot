@@ -9,6 +9,7 @@ from test.dummy_chat import DummyChat
 from test.dummy_user import DummyUser
 
 from core.get_ids import get_ids
+from core.toptenlist import toptenlist
 
 from db.database_abstraction import DatabaseAbstraction
 from db.database_minimal import DatabaseMinimal
@@ -51,10 +52,14 @@ class TestDatabaseMinimal(unittest.TestCase):
 
     def test_counter_user(self):
         self.db.increment_counter('kurkkumopo', 'chatti', 'laskuri', 609)
+        self.db.increment_counter('eltsu7', 'chatti', 'laskuri', 88)
+        self.db.increment_counter('eltsu5', 'chatti2', 'laskuri', 88)
         self.assertEqual(self.db.get_counter_user('kurkkumopo', 'chatti', 'laskuri'), 609)
         self.db.increment_counter('kurkkumopo', 'chatti', 'laskuri', 1)
         self.assertEqual(self.db.get_counter_user('kurkkumopo', 'chatti', 'laskuri'), 610)        
         self.db.get_counter_user('joku', 'joku', 'joku')
+
+        print(self.db.get_counter_top('chatti', 'laskuri', 10))
 
     def test_word_counter_user(self):
         self.db.word_collection_add('chatti', 'kurkkumopo', '', '', 'ebin', 3)
@@ -67,6 +72,19 @@ class TestDatabaseMinimal(unittest.TestCase):
             'kurkkumopo'), {'ebin': 3, 'sana': 1})
 
         self.assertEqual(self.db.word_collection_get_chat('chatti')['ebin'], 39)
+
+class TopTenList(unittest.TestCase):
+    def test(self):
+        db_imp = DatabaseMinimal()
+
+        global db
+        db = DatabaseAbstraction(db_imp)
+        
+        db.increment_counter('kurkkumopo', 'chatti', 'kiitos', 609)
+        db.increment_counter('eltsu7', 'chatti', 'kiitos', 88)
+
+        print(toptenlist('chatti', 'kiitos'))
+
 
 if __name__ == '__main__':
     print("Yksikkötestit")
