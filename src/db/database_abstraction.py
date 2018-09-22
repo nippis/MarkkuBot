@@ -10,8 +10,8 @@ class DatabaseAbstraction:
     def __init__(self, imp):
         self.imp = imp  # Toteuttava luokka
 
-    def in_blacklist(self):
-        val = self.imp.in_blacklist()
+    def in_blacklist(self, user_id):
+        val = self.imp.in_blacklist(user_id)
 
         if isinstance(val, bool):
             return val
