@@ -4,7 +4,12 @@ class DatabaseAbstraction:
         self.imp = imp  # Toteuttava luokka
 
     def in_blacklist(self):
-        return self.imp.in_blacklist()
+        val = self.imp.in_blacklist()
+
+        if isinstance(val, bool):
+            return val
+        else:
+            raise TypeError
 
     def add_blacklist(self, user_id):
         self.imp.add_blacklist(user_id)
