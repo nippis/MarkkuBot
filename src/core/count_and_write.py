@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from core.get_ids import get_ids
 #TODO collection
 
