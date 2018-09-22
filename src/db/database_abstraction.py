@@ -28,7 +28,7 @@ class DatabaseAbstraction:
         self.imp.increment_counter(user_id, chat_id, counter, amount)
 
     def get_counter_user(self, user_id, chat_id, counter):
-        return self.imp.get_counter_user(chat_id, user_id, counter)
+        return self.imp.get_counter_user(user_id, chat_id, counter)
 
     def get_counter_top(self, chat_id, counter, top_amount):
         return self.imp.get_counter_top(chat_id, counter, top_amount)
