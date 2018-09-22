@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from core.printlog import printlog
 from core.count_and_write import count_and_write
 from core.get_ids import get_ids
