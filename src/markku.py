@@ -3,12 +3,8 @@
 import logging
 import random
 import re
-from collections import Counter
 from os import environ
-from urllib.request import Request, urlopen
 
-from pymongo import ASCENDING, MongoClient
-from pymongo import errors as MongoErrors
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
@@ -27,9 +23,9 @@ from command_handlers.stats import stats
 from command_handlers.topten_kiitos import topten_kiitos
 from command_handlers.topten_messages import topten_messages
 
-from command_handlers.blacklist.blacklist import blacklist
-from command_handlers.blacklist.unblacklist import unblacklist
-from command_handlers.blacklist.blacklist_confirm import blacklist_confirm
+#from command_handlers.blacklist.blacklist import blacklist
+#from command_handlers.blacklist.unblacklist import unblacklist
+#from command_handlers.blacklist.blacklist_confirm import blacklist_confirm
 
 from message_handlers.msg_gif import msg_gif
 from message_handlers.msg_photo import msg_photo
@@ -50,9 +46,9 @@ def handlers(updater):
     dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
     dp.add_handler(CommandHandler('protip', protip))
     dp.add_handler(CommandHandler('kysymys', camera_versus))
-    dp.add_handler(CommandHandler('blacklist', blacklist))
-    dp.add_handler(CommandHandler('unblacklist', unblacklist))
-    dp.add_handler(CallbackQueryHandler(blacklist_confirm))
+    #dp.add_handler(CommandHandler('blacklist', blacklist))
+    #dp.add_handler(CommandHandler('unblacklist', unblacklist))
+    #dp.add_handler(CallbackQueryHandler(blacklist_confirm))
     dp.add_handler(MessageHandler(Filters.sticker, msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, msg_text))
     dp.add_handler(MessageHandler(Filters.photo, msg_photo))
@@ -71,16 +67,8 @@ protip_list = masterlist["Tips"]
 camera_list = masterlist["Cameras"]
 
 tg_token = environ["TG_TOKEN"]
-db_name = environ["DB_NAME"]
-chats_coll_name = environ["CHATS_COLL_NAME"]
-words_coll_name = environ["WORDS_COLL_NAME"]
-blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
-# TODO: failaa jos ei saada yhteyttä
-db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
-db = db_client[db_name]
-chats_collection = db[chats_coll_name]
-words_collection = db[words_coll_name]
-blacklist_collection = db[blacklist_coll_name]
+db_imp = DatabaseMinimal()
+db = DatabaseAbstraction(db_imp)
 
 main()

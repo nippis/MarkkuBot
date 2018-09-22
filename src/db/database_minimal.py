@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import operator
+
 class DatabaseMinimal:
     def __init__(self):
         self.blacklist = set()
@@ -39,7 +41,14 @@ class DatabaseMinimal:
 
     def get_counter_top(self, chat_id, counter, top_amount):
         try:
-            return self.counters[counter][chat_id]
+            chat_counter = self.counters[counter][chat_id]
+            sorted_counter = sorted(chat_counter.items(), key=operator.itemgetter(1))
+            sorted_counter_return = []
+
+            for item in sorted_counter:
+                sorted_counter_return.append({'username': item[0], 'count': item[1]})
+
+            return sorted_counter_return[:top_amount]
         except KeyError:
             pass
 
@@ -65,9 +74,7 @@ class DatabaseMinimal:
             words_return = dict()
 
             for user, words in word_collection.items():
-                print(user, words)
                 for word, amount in words.items():
-                    print("Sanalle %s lisätään %s" % (word, amount))
                     if word in words_return:
                         words_return[word] += amount
                     else:

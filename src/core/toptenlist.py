@@ -1,14 +1,5 @@
-#TODO collection
-
 def toptenlist(chat_id, var):
-    cursor = chats_collection.aggregate([
-        { "$match": { "chat_id": chat_id }},
-        { "$project": { "_id": 0, "username": 1, "count": "$count." + var }},
-        { "$sort": { "count": -1 }},
-        { "$limit": 10 }
-    ])
-
-    topten_sorted = list(cursor)
+    topten_sorted = db.get_counter_top(chat_id, var, 10)
 
     text = ""
     number = 1
