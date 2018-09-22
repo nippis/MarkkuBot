@@ -1,26 +1,85 @@
+# -*- coding: utf-8 -*-
 class DatabaseMinimal:
+    def __init__(self):
+        self.blacklist = set()
+        self.counters = dict()
+        self.word_counter = dict()
+
     def in_blacklist(self, user_id):
-        return True
+        return user_id in self.blacklist
 
     def add_blacklist(self, user_id):
-        pass
+        # TODO poista data
+        self.blacklist.add(user_id)
 
     def remove_blacklist(self, user_id):
-        pass
+        try:
+            self.blacklist.remove(user_id)
+        except KeyError:
+            pass # Ei ollut alunperinkään blacklistissä
 
     def increment_counter(self, user_id, chat_id, counter, amount):
-        pass
+        if counter not in self.counters:
+            self.counters[counter] = dict()
+            self.counters[counter][chat_id] = dict()
+
+        if chat_id not in self.counters[counter]:
+            self.counters[counter][chat_id] = dict()
+
+        if user_id not in self.counters[counter][chat_id]:
+            self.counters[counter][chat_id][user_id] = amount
+        else:
+            self.counters[counter][chat_id][user_id] += amount
+
+    def get_counter_user(self, user_id, chat_id, counter):
+        try:
+            return self.counters[counter][chat_id][user_id]
+        except KeyError:
+            return 0
 
     def get_counter_top(self, chat_id, counter, top_amount):
-        return "jtn"
+        try:
+            return self.counters[counter][chat_id]
+        except KeyError:
+            pass
 
     def word_collection_add(self, chat_id, user_id, chat_title, username, \
         word, amount):
-        pass
+        if chat_id in self.word_counter:
+            if user_id in self.word_counter[chat_id]:
+                if word in self.word_counter[chat_id][user_id]:
+                    self.word_counter[chat_id][user_id][word] += amount
+                else:
+                    self.word_counter[chat_id][user_id][word] = amount
+            else:
+                self.word_counter[chat_id][user_id] = dict()
+                self.word_counter[chat_id][user_id][word] = amount
+        else:
+            self.word_counter[chat_id] = dict()
+            self.word_counter[chat_id][user_id] = dict()
+            self.word_counter[chat_id][user_id][word] = amount
 
     def word_collection_get_chat(self, chat_id):
-        return "jtn2"
+        try:
+            word_collection = self.word_counter[chat_id]
+            words_return = dict()
+
+            for user, words in word_collection.items():
+                print(user, words)
+                for word, amount in words.items():
+                    print("Sanalle %s lisätään %s" % (word, amount))
+                    if word in words_return:
+                        words_return[word] += amount
+                    else:
+                        words_return[word] = amount
+
+            return words_return
+        except KeyError:
+            return 0        
 
     def word_collection_get_chat_user(self, chat_id, user_id):
-        return "jtn"
+        try:
+            return self.word_counter[chat_id][user_id]
+        except KeyError:
+            return 0
 
