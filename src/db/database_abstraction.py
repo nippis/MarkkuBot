@@ -1,3 +1,10 @@
+# Luokan poikkeukset
+class DatabaseError(Exception):
+    pass
+
+class DuplicateKeyError(DatabaseError):
+    pass
+
 # Bridge-patternin abstraktio-luokka
 class DatabaseAbstraction:
     def __init__(self, imp):
