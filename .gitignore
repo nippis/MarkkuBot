@@ -4,3 +4,4 @@
 db/
 settings.json
 teksti.txt
+*.pyc
