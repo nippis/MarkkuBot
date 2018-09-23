@@ -26,7 +26,7 @@ def handlers(updater):
     dp.add_handler(CommandHandler('darkroom', cr.darkroom))
     dp.add_handler(CommandHandler('stats', cr.stats))
     dp.add_handler(CommandHandler('help', cr.help))
-    #dp.add_handler(CommandHandler('noutaja', noutaja))
+    dp.add_handler(CommandHandler('noutaja', cr.noutaja))
     #dp.add_handler(CommandHandler('toptenmsg', topten_messages))
     #dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
     #dp.add_handler(CommandHandler('protip', protip))
