@@ -58,7 +58,7 @@ class DatabaseMinimal:
 
             return sorted_counter_return[:top_amount]
         except KeyError:
-            pass
+            return []
 
     def word_collection_add(self, chat_id, user_id, chat_title, username, \
         word, amount):

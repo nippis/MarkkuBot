@@ -16,24 +16,31 @@ from message_handlers.message_router import MessageRouter
 def handlers(updater):
     dp = updater.dispatcher
 
-    db_imp = DatabaseMinimal()
+    # Avataan tietokanta
+    db_imp = DatabaseMinimal() # TODO backendin valinta conffin kautta
     db = DatabaseAbstraction(db_imp)
+
+    # Alustetaan routerit
     cr = CommandRouter(db)
     mr = MessageRouter(db)
 
-    # Tässä alla oleville komennoille (esim darkroom) annetaan aina bot ja updater argumenteiksi
+    # Komentojen kautta toimivat
     dp.add_handler(CommandHandler('start', cr.start))
     dp.add_handler(CommandHandler('darkroom', cr.darkroom))
     dp.add_handler(CommandHandler('stats', cr.stats))
     dp.add_handler(CommandHandler('help', cr.help))
     dp.add_handler(CommandHandler('noutaja', cr.noutaja))
     #dp.add_handler(CommandHandler('toptenmsg', topten_messages))
-    #dp.add_handler(CommandHandler('toptenkiitos', topten_kiitos))
+    dp.add_handler(CommandHandler('toptenkiitos', cr.topten_kiitos))
     #dp.add_handler(CommandHandler('protip', protip))
     #dp.add_handler(CommandHandler('kysymys', camera_versus))
+
+    # Blacklist
     #dp.add_handler(CommandHandler('blacklist', blacklist))
     #dp.add_handler(CommandHandler('unblacklist', unblacklist))
     #dp.add_handler(CallbackQueryHandler(blacklist_confirm))
+
+    # Suoraa viestiä urkkivat kilkkeet
     dp.add_handler(MessageHandler(Filters.sticker, mr.msg_sticker))
     dp.add_handler(MessageHandler(Filters.text, mr.msg_text))
     dp.add_handler(MessageHandler(Filters.photo, mr.msg_photo))
