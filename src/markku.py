@@ -30,7 +30,7 @@ def handlers(updater):
     dp.add_handler(CommandHandler('stats', cr.stats))
     dp.add_handler(CommandHandler('help', cr.help))
     dp.add_handler(CommandHandler('noutaja', cr.noutaja))
-    #dp.add_handler(CommandHandler('toptenmsg', topten_messages))
+    dp.add_handler(CommandHandler('toptenmsg', cr.topten_messages))
     dp.add_handler(CommandHandler('toptenkiitos', cr.topten_kiitos))
     #dp.add_handler(CommandHandler('protip', protip))
     #dp.add_handler(CommandHandler('kysymys', camera_versus))
