@@ -132,8 +132,18 @@ class CommandRouter():
 
         list, number = toptenlist(self.db, chat_id, "count.kiitos")
 
-        print(list, number)
-
         text = "Top " + str(number) + " kiitostelijat:\n" + list
+
+        bot.send_message(chat_id=chat_id, text=text)
+
+    def topten_messages(self, bot, update):
+        printlog(update, "toptenmessages")
+
+        _, chat_id = get_ids(update)
+        count_and_write(self.db, update, "commands")
+
+        list, number = toptenlist(self.db, chat_id, "count.messages")
+
+        text = "Top " + str(number) + " viestittelijät:\n" + list
 
         bot.send_message(chat_id=chat_id, text=text)
