@@ -101,7 +101,7 @@ class CommandRouter():
                 "/blacklist - Poista omat tietosi Markun tietokannasta ja estä uusien tallentaminen, lähetä privana Markulle\n"\
                 "/unblacklist - Salli omien tietojesi tallentaminen blacklist-komennon jälkeen, lähetä privana Markulle\n"\
                 "\n" \
-                "Botin koodit: @eltsu7 ja @kulmajaba\n" \
+                "Botin koodit: @eltsu7, @kulmajaba ja @anttimoi\n" \
                 "Valosensorit ja siihen koodit: @anttimoi"
 
         bot.send_message(chat_id=chat_id, text=reply)            
