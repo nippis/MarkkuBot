@@ -23,7 +23,7 @@ def handlers(updater):
 
     # Tässä alla oleville komennoille (esim darkroom) annetaan aina bot ja updater argumenteiksi
     dp.add_handler(CommandHandler('start', cr.start))
-    #dp.add_handler(CommandHandler('darkroom', darkroom))
+    dp.add_handler(CommandHandler('darkroom', cr.darkroom))
     dp.add_handler(CommandHandler('stats', cr.stats))
     #dp.add_handler(CommandHandler('help', help))
     #dp.add_handler(CommandHandler('noutaja', noutaja))
