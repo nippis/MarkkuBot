@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 from core.printlog import printlog
@@ -105,3 +105,20 @@ class CommandRouter():
                 "Valosensorit ja siihen koodit: @anttimoi"
 
         bot.send_message(chat_id=chat_id, text=reply)            
+
+    def noutaja(self, bot, update):
+        printlog(update, "noutaja")
+
+        _, chat_id = get_ids(update)
+        count_and_write(self.db, update, "commands")
+
+        url = "https://dog.ceo/api/breed/retriever/golden/images/random"
+
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+
+        with urlopen(req) as page:
+            retriever_data = json.loads(page.read().decode())
+
+            picture_link = retriever_data["message"]
+
+            bot.sendPhoto(chat_id=chat_id, photo=picture_link)
