@@ -9,6 +9,14 @@ class DuplicateKeyError(DatabaseError):
 class DatabaseAbstraction:
     def __init__(self, imp):
         self.imp = imp  # Toteuttava luokka
+        self.counters = [
+            "count.messages",
+            "count.stickers",
+            "count.photos",
+            "count.gifs",
+            "count.commands",
+            "count.kiitos"
+        ]
 
     def in_blacklist(self, user_id):
         val = self.imp.in_blacklist(user_id)
