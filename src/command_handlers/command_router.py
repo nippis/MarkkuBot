@@ -6,6 +6,7 @@ from urllib.error import URLError
 from core.printlog import printlog
 from core.count_and_write import count_and_write
 from core.get_ids import get_ids
+from core.toptenlist import toptenlist
 
 class CommandRouter():
     def __init__(self, db):
@@ -122,3 +123,17 @@ class CommandRouter():
             picture_link = retriever_data["message"]
 
             bot.sendPhoto(chat_id=chat_id, photo=picture_link)
+
+    def topten_kiitos(self, bot, update): #TODO username
+        printlog(update, "toptenkiitos")
+
+        _, chat_id = get_ids(update)
+        count_and_write(self.db, update, "commands")
+
+        list, number = toptenlist(self.db, chat_id, "count.kiitos")
+
+        print(list, number)
+
+        text = "Top " + str(number) + " kiitostelijat:\n" + list
+
+        bot.send_message(chat_id=chat_id, text=text)
