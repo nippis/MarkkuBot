@@ -32,8 +32,9 @@ class DatabaseAbstraction:
     def remove_blacklist(self, user_id):
         self.imp.remove_blacklist(user_id)
 
-    def increment_counter(self, user_id, chat_id, counter, amount):
-        self.imp.increment_counter(user_id, chat_id, counter, amount)
+    def increment_counter(self, user_id, chat_id, counter, amount, \
+        chat_title, username):
+        self.imp.increment_counter(user_id, chat_id, counter, amount, chat_title, username)
 
     def get_counter_user(self, user_id, chat_id, counter):
         return self.imp.get_counter_user(user_id, chat_id, counter)

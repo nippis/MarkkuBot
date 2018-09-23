@@ -5,7 +5,6 @@ def toptenlist(db, chat_id, var):
     number = 1
 
     for user in topten_sorted:
-        print(user, user["username"], user["count"])
         text += str(number) + ". " + str(user["username"]) + ": " + str(user["count"]) + "\n"
         number += 1
 

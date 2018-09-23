@@ -6,11 +6,15 @@ class DatabaseMinimal:
         self.blacklist = set()
         self.counters = dict()
         self.word_counter = dict()
+        self.chat_title = dict()
+        self.username = dict()
 
     def print_state(self):
         print('Blacklist', self.blacklist)
         print('Counters', self.counters)
         print('Word Counter', self.word_counter)
+        print('Chat title', self.chat_title)
+        print('Username', self.username)
 
     def in_blacklist(self, user_id):
         return user_id in self.blacklist
@@ -25,7 +29,10 @@ class DatabaseMinimal:
         except KeyError:
             pass # Ei ollut alunperinkään blacklistissä
 
-    def increment_counter(self, user_id, chat_id, counter, amount):
+    def increment_counter(self, user_id, chat_id, counter, amount, chat_title, username):
+        self.username[user_id] = username
+        self.chat_title[chat_id] = chat_id
+
         if counter not in self.counters:
             self.counters[counter] = dict()
             self.counters[counter][chat_id] = dict()
@@ -54,7 +61,13 @@ class DatabaseMinimal:
             sorted_counter_return = []
 
             for item in sorted_counter:
-                sorted_counter_return.append({'username': item[0], 'count': item[1]})
+                
+                try:
+                    username = self.username[item[0]]
+                except KeyError:
+                    username = '???'
+
+                sorted_counter_return.append({'username': username, 'count': item[1]})
 
             return sorted_counter_return[:top_amount]
         except KeyError:
