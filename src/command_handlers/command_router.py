@@ -2,6 +2,7 @@
 import json
 from urllib.request import urlopen, Request
 from urllib.error import URLError
+import random
 
 from core.printlog import printlog
 from core.count_and_write import count_and_write
@@ -147,3 +148,13 @@ class CommandRouter():
         text = "Top " + str(number) + " viestittelijät:\n" + list
 
         bot.send_message(chat_id=chat_id, text=text)
+
+    def protip(self, bot, update):
+        printlog(update, "protip")
+
+        _, chat_id = get_ids(update)
+        count_and_write(self.db, update, "commands")
+
+        protip_index = random.randint(0, len(protip_list) - 1)  # TODO listat toimintaan myös täällä
+
+        bot.send_message(chat_id=chat_id, text=protip_list[protip_index])
