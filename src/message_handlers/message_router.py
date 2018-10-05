@@ -60,7 +60,7 @@ class MessageRouter():
         printlog(update, "sticker")
         count_and_write(self.db, update, "stickers")
 
-    def status_new_members(self, bot, update):
+    def status_new_members(self, bot, update): # TODO listat + viestiin vastaus
         printlog(update, "new member")
         #msg = camera_versus_text()
         #update.message.reply_text(msg)
