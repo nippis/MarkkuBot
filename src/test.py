@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 from test.dummy_bot import DummyBot
@@ -14,7 +14,7 @@ from core.toptenlist import toptenlist
 from db.database_abstraction import DatabaseAbstraction
 from db.database_minimal import DatabaseMinimal
 
-from command_handlers.start import start
+from command_handlers.command_router.start import start
 
 update_generic = DummyUpdate(chat=DummyChat('609'), from_user=DummyUser('1377', 'kurkkumopo'))
 
