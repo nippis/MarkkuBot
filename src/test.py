@@ -14,7 +14,7 @@ from core.toptenlist import toptenlist
 from db.database_abstraction import DatabaseAbstraction
 from db.database_minimal import DatabaseMinimal
 
-from command_handlers.command_router.start import start
+from command_handlers.command_router import CommandRouter
 
 update_generic = DummyUpdate(chat=DummyChat('609'), from_user=DummyUser('1377', 'kurkkumopo'))
 
@@ -28,7 +28,7 @@ class TestStart(unittest.TestCase):
     def test_equals(self):
         out = StringIO()
         bot = DummyBot(out=out)
-        start(bot, update_generic)
+        CommandRouter.start(bot, update_generic)
         botText = out.getvalue().strip()
         self.assertEqual(botText, "Woof woof")
 
@@ -51,15 +51,17 @@ class TestDatabaseMinimal(unittest.TestCase):
         self.assertFalse(self.db.in_blacklist('kurkkumopo'))
 
     def test_counter_user(self):
-        self.db.increment_counter('kurkkumopo', 'chatti', 'laskuri', 609)
-        self.db.increment_counter('eltsu7', 'chatti', 'laskuri', 88)
-        self.db.increment_counter('eltsu5', 'chatti2', 'laskuri', 88)
-        self.assertEqual(self.db.get_counter_user('kurkkumopo', 'chatti', 'laskuri'), 609)
-        self.db.increment_counter('kurkkumopo', 'chatti', 'laskuri', 1)
-        self.assertEqual(self.db.get_counter_user('kurkkumopo', 'chatti', 'laskuri'), 610)        
+        self.db.increment_counter('kurkkumopo_id', 'chatti_id', 'laskuri', 609, 'chatti', 'kurkkumopo')
+        self.db.increment_counter('eltsu7_id', 'chatti_id', 'laskuri', 88, 'chatti', 'eltsu7')
+        self.db.increment_counter('eltsu5_id', 'chatti2_id', 'laskuri', 88, 'chatti2', 'eltsu5')
+        self.assertEqual(self.db.get_counter_user('kurkkumopo_id', 'chatti_id', 'laskuri'), 609)
+
+        self.db.increment_counter('kurkkumopo_id', 'chatti_id', 'laskuri', 1, 'chatti', 'kurkkumopo')
+        self.assertEqual(self.db.get_counter_user('kurkkumopo_id', 'chatti_id', 'laskuri'), 610)  
+
         self.db.get_counter_user('joku', 'joku', 'joku')
 
-        print(self.db.get_counter_top('chatti', 'laskuri', 10))
+        #print(self.db.get_counter_top('chatti', 'laskuri', 10))
 
     def test_word_counter_user(self):
         self.db.word_collection_add('chatti', 'kurkkumopo', '', '', 'ebin', 3)
@@ -80,10 +82,10 @@ class TopTenList(unittest.TestCase):
         global db
         db = DatabaseAbstraction(db_imp)
         
-        db.increment_counter('kurkkumopo', 'chatti', 'kiitos', 609)
-        db.increment_counter('eltsu7', 'chatti', 'kiitos', 88)
+        db.increment_counter('kurkkumopo_id', 'chatti_id', 'kiitos', 609, 'chatti', 'kurkkumopo')
+        db.increment_counter('eltsu7_id', 'chatti_id', 'kiitos', 88, 'chatti', 'eltsu7')
 
-        print(toptenlist('chatti', 'kiitos'))
+        #print(toptenlist(db, 'chatti', 'kiitos'))
 
 
 if __name__ == '__main__':
