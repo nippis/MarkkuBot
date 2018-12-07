@@ -45,10 +45,10 @@ class DatabaseMinimal:
         else:
             self.counters[counter][chat_id][user_id] += amount
 
-        self.print_state()
+        # self.print_state()
 
     def get_counter_user(self, user_id, chat_id, counter):
-        print('get_counter_user', user_id, chat_id, counter)
+        # print('get_counter_user', user_id, chat_id, counter)
         try:
             return self.counters[counter][chat_id][user_id]
         except KeyError:
