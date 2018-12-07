@@ -9,10 +9,12 @@ from core.count_and_write import count_and_write
 from core.get_ids import get_ids
 from core.toptenlist import toptenlist
 from core.camera_versus_text import camera_versus_text
+from core.file_read import file_read
 
 class CommandRouter():
     def __init__(self, db):
         self.db = db
+        self.masterlist = file_read("src/masterlist.json")
 
     def start(self, bot, update):
         printlog(update, "start")
@@ -156,7 +158,9 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        protip_index = random.randint(0, len(protip_list) - 1)  # TODO listat toimintaan myös täällä
+        protip_list = self.masterlist["Tips"]
+
+        protip_index = random.randint(0, len(protip_list) - 1)
 
         bot.send_message(chat_id=chat_id, text=protip_list[protip_index])
 
