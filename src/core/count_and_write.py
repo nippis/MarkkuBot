@@ -4,7 +4,6 @@ from core.get_ids import get_ids
 #TODO collection
 
 def count_and_write(db, update, var):
-    print("count_and_write", var)
     user_id, chat_id = get_ids(update)
 
     # TODO: tsekkaa onko nimi Not Found, tsekkaa onko käyttäjänimi muuttunu järkeväks, jos on niin päivitä
