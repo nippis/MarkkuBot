@@ -4,6 +4,7 @@ from core.printlog import printlog
 from core.get_ids import get_ids
 from core.count_and_write import count_and_write
 from core.parse_and_count import parse_and_count
+from core.camera_versus_text import camera_versus_text
 
 class MessageRouter():
     def __init__(self, db):
@@ -60,7 +61,7 @@ class MessageRouter():
         printlog(update, "sticker")
         count_and_write(self.db, update, "stickers")
 
-    def status_new_members(self, bot, update): # TODO listat + viestiin vastaus
+    def status_new_members(self, bot, update):
         printlog(update, "new member")
-        #msg = camera_versus_text()
-        #update.message.reply_text(msg)
+        msg = camera_versus_text()
+        update.message.reply_text(msg)
