@@ -14,7 +14,7 @@ from core.file_read import file_read
 class CommandRouter():
     def __init__(self, db):
         self.db = db
-        self.masterlist = file_read("src/masterlist.json")
+        self.masterlist = file_read("masterlist.json")
 
     def start(self, bot, update):
         printlog(update, "start")
