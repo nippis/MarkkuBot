@@ -8,5 +8,5 @@ def file_read(filename):
         file.close()
         return saved_data
     except FileNotFoundError:
-        print("Oh dog file not found")
+        print("Oh dog file {} not found".format(filename))
         exit(1)
