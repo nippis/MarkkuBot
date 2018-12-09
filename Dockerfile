@@ -9,8 +9,7 @@ COPY requirements.txt /src
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Kopioi tarvittavat tiedostot src:n alle
-COPY src/markku.py /src
-COPY src/masterlist.json /src
+COPY src /src
 
 # Aja markku, kun container käynnistetään
 CMD ["python", "markku.py"]
