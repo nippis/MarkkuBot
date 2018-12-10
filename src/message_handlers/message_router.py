@@ -5,12 +5,11 @@ from core.get_ids import get_ids
 from core.count_and_write import count_and_write
 from core.parse_and_count import parse_and_count
 from core.camera_versus_text import camera_versus_text
-from core.file_read import file_read
+import masterlist
 
 class MessageRouter():
     def __init__(self, db):
         self.db = db
-        self.masterlist = file_read("masterlist.json")
 
     def msg_text(self, bot, update):
         printlog(update, "text")
@@ -18,7 +17,7 @@ class MessageRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "messages")
 
-        sticker_list = self.masterlist["Stickers"]
+        sticker_list = masterlist.stickers
         message = update.message.text.lower()
 
         #parse_and_count(update) TODO

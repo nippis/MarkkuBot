@@ -94,7 +94,7 @@ class DatabaseMinimal:
             word_collection = self.word_counter[chat_id]
             words_return = dict()
 
-            for user, words in word_collection.items():
+            for _, words in word_collection.items():
                 for word, amount in words.items():
                     if word in words_return:
                         words_return[word] += amount

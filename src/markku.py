@@ -5,10 +5,9 @@ from os import environ
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
-from core.file_read import file_read
-
 from db.database_abstraction import DatabaseAbstraction
-from db.database_minimal import DatabaseMinimal
+from db.database_minimal import DatabaseMinimal #turha?
+from db.database_mongo import DatabaseMongo
 
 from command_handlers.command_router import CommandRouter
 from message_handlers.message_router import MessageRouter
@@ -17,7 +16,7 @@ def handlers(updater):
     dp = updater.dispatcher
 
     # Avataan tietokanta
-    db_imp = DatabaseMinimal() # TODO backendin valinta conffin kautta
+    db_imp = DatabaseMongo() # TODO backendin valinta conffin kautta
     db = DatabaseAbstraction(db_imp)
 
     # Alustetaan routerit
@@ -36,9 +35,9 @@ def handlers(updater):
     dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
 
     # Blacklist
-    #dp.add_handler(CommandHandler('blacklist', blacklist))
-    #dp.add_handler(CommandHandler('unblacklist', unblacklist))
-    #dp.add_handler(CallbackQueryHandler(blacklist_confirm))
+    dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
+    dp.add_handler(CommandHandler('unblacklist', cr.remove_blacklist))
+    dp.add_handler(CallbackQueryHandler(cr.blacklist_confirm))
 
     # Suoraa viestiä urkkivat kilkkeet
     dp.add_handler(MessageHandler(Filters.sticker, mr.msg_sticker))
