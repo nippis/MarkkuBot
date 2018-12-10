@@ -30,7 +30,7 @@ class CommandRouter():
 
         user_id, chat_id = get_ids(update)
 
-        #count_and_write(self.db, update, "commands")
+        count_and_write(self.db, update, "commands")
 
         if self.db.in_blacklist(user_id):
             update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
