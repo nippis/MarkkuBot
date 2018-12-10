@@ -9,12 +9,13 @@ from core.count_and_write import count_and_write
 from core.get_ids import get_ids
 from core.toptenlist import toptenlist
 from core.camera_versus_text import camera_versus_text
-from core.file_read import file_read
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+import masterlist
 
 class CommandRouter():
     def __init__(self, db):
         self.db = db
-        self.masterlist = file_read("masterlist.json")
 
     def start(self, bot, update):
         printlog(update, "start")
@@ -29,17 +30,17 @@ class CommandRouter():
 
         user_id, chat_id = get_ids(update)
 
-        count_and_write(self.db, update, "commands")
+        #count_and_write(self.db, update, "commands")
 
         if self.db.in_blacklist(user_id):
             update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
                                     "Markku does not track you. Use the command /unblacklist to enable tracking.")
             return
 
-        count_messages = self.db.get_counter_user(user_id, chat_id, "count.messages")
-        count_stickers = self.db.get_counter_user(user_id, chat_id, "count.stickers")
-        count_kiitos = self.db.get_counter_user(user_id, chat_id, "count.kiitos")
-        count_photos = self.db.get_counter_user(user_id, chat_id, "count.photos")
+        count_messages = self.db.get_counter_user(user_id, chat_id, "messages")
+        count_stickers = self.db.get_counter_user(user_id, chat_id, "stickers")
+        count_kiitos = self.db.get_counter_user(user_id, chat_id, "kiitos")
+        count_photos = self.db.get_counter_user(user_id, chat_id, "photos")
 
         sticker_percent = 0
         kiitos_percent = 0
@@ -158,7 +159,7 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        protip_list = self.masterlist["Tips"]
+        protip_list = masterlist.tips
 
         protip_index = random.randint(0, len(protip_list) - 1)
 
@@ -172,3 +173,74 @@ class CommandRouter():
 
         msg = camera_versus_text()
         bot.send_message(chat_id=chat_id, text=msg)
+
+    def add_blacklist(self, bot, update):
+        printlog(update, "blacklist")
+
+        user_id, _ = get_ids(update)
+
+        if (update.message.chat.type != "private"):
+            update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä.\n" \
+                                    "Please send this request via private message.")
+            return
+
+        
+        if self.db.in_blacklist(user_id):
+            print("1")
+            update.message.reply_text("Tietosi on jo poistettu, eikä sinua seurata.\n" \
+                                    "Your information is already deleted and you are not tracked.")
+            return
+
+        keyboard = [[InlineKeyboardButton("Ei (No)", callback_data="false"),
+                    InlineKeyboardButton("Kyllä (Yes)", callback_data="true")]]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        update.message.reply_text("Haluatko, että kaikki henkilöivät tietosi poistetaan Markun tietokannasta," \
+                                "ja käyttäjäsi lisätään \"älä seuraa\"-listalle?\n\n" \
+                                "Do you want to delete all of your personifiable information from Markku's database" \
+                                "and add your user to the \"do not track\" list?",
+                                reply_markup=reply_markup)
+
+        print("3")
+
+    def remove_blacklist(self, bot, update):
+        user_id, _ = get_ids(update)
+
+        if (update.message.chat.type != "private"):
+            update.message.reply_text("Ole hyvä ja lähetä tämä pyyntö yksityisviestillä\n" \
+                                    "Please send this request via private message")
+            return
+
+        if self.db.in_blacklist(user_id):
+            
+            self.db.remove_blacklist(user_id)
+            update.message.reply_text("Markku seuraa sinua taas.\n" \
+                                    "Markku is tracking you again.\n\n" \
+                                    "*sniff sniff* Woof!")
+        else:
+            update.message.reply_text("Et ole Markun \"älä seuraa\"-listalla.\n" \
+                                    "You are not on Markku's \"do not track\" list.")
+
+    def blacklist_confirm(self, bot, update):
+        query = update.callback_query
+
+        username = query.from_user.username
+        user_id = query.from_user.id
+
+        print("Type: blacklist_confirm", "\nUsername: ", username)
+
+        if (query.data == "false"):
+            bot.edit_message_text(text="Käyttäjätietojen poistaminen peruttu.\n" \
+                                    "The deletion of user information has been cancelled.",
+                                chat_id=query.message.chat_id,
+                                message_id=query.message.message_id)
+            return
+        
+        bot.edit_message_text(text="Käyttäjätiedot poistettu, ja käyttäjää ei seurata jatkossa.\n" \
+                                    "User information deleted, and the user will not be tracked.",
+                                chat_id=query.message.chat_id,
+                                message_id=query.message.message_id)
+
+        # Poista kaikki käyttäjän dokumentit
+        self.db.add_blacklist(user_id)
