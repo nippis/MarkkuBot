@@ -1,6 +1,6 @@
 # MarkkuBot
 
-TT-kameroiden virtuaalinen maskotti.
+MarkkuBot tai kutsumanimeltään Markku on TT-Kameroiden telegram-chattia varten tehty botti jonka päätehtävä on kertoa onko kerhohuoneella valot päällä. Markulle on ajan mittaan opetettu muitakin temppuja kuten kiittämisen jalo taito.
 
 ## Docker
 
