@@ -34,11 +34,9 @@ class DatabaseMongo:
         self.blacklist_collection.create_index([("user_id", ASCENDING)], unique=True)
 
     def remove_blacklist(self, user_id):
-        print("1")
         self.blacklist_collection.delete_one({ "user_id": user_id })
-        print("2")
 
-    def increment_counter(self, user_id, chat_id, var, amount):
+    def increment_counter(self, user_id, chat_id, var, amount, chat_title, username):
         countIncrementer = {
             "count.messages": 0,
             "count.stickers": 0,
@@ -56,7 +54,7 @@ class DatabaseMongo:
             { "chat_id": chat_id, "user_id": user_id },
             {"$inc": countIncrementer},
             True
-        )   
+        )
 
     def get_counter_user(self, user_id, chat_id, counter):
         user_data = self.chats_collection.find({ "chat_id": chat_id, "user_id": user_id })["count"]
@@ -82,7 +80,7 @@ class DatabaseMongo:
 
         return text, len(topten_sorted)
         
-    def word_collection_add(self, chat_id, user_id, chat_title, username, \
+    def word_collection_add(self, user_id, chat_id, chat_title, username, \
         word, amount):
             
         self.words_collection.update_one(
