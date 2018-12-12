@@ -1,12 +1,13 @@
 from core.get_ids import get_ids
 from collections import Counter
+import re
 #TODO collection
 
-def parse_and_count(update):
+def parse_and_count(db, update):
     user_id, chat_id = get_ids(update)
 
     # Älä laske blacklistattuja
-    if (blacklist_collection.find_one({ "user_id": user_id }) != None):
+    if db.in_blacklist(user_id):
         return
 
     text = update.message.text.upper()
@@ -33,19 +34,6 @@ def parse_and_count(update):
     # laskee listasta sanat ja tallentaa sen muotoon {"sana1": sanaMäärä1, "sana2": sanaMäärä2 ... }
     wordCount = Counter(split_text)
 
-    # lisää joka sanan alkuun "words."
-    countIncrement = {}
-    for i in wordCount:
-        countIncrement["words." + i] = wordCount[i]
-
-    words_collection.update_one(
-        { "chat_id": chat_id, "user_id": user_id },
-        { 
-            "$inc": countIncrement,
-            "$setOnInsert": {
-                "chat_title": chat_title,
-                "username": username,
-            }
-        },
-        True
-    )
+    # lisätään sanat db:n sanacountteriin
+    for word in wordCount:
+        db.word_collection_add(user_id, chat_id, chat_title, username, word, wordCount[word])
