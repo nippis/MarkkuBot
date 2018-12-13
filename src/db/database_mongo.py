@@ -23,6 +23,7 @@ class DatabaseMongo:
 
     def in_blacklist(self, user_id):
         cur = self.blacklist_collection.find({ "user_id": user_id })
+
         return (cur.count() != 0)
 
     def add_blacklist(self, user_id):
