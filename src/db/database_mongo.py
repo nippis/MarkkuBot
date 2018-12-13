@@ -10,16 +10,19 @@ class DatabaseMongo:
         words_coll_name = environ["WORDS_COLL_NAME"]
         blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
-        db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
-        db = db_client[db_name]
+        self.db_client = MongoClient("localhost:27017", serverSelectionTimeoutMS=1000)
+        db = self.db_client[db_name]
+
+        self.db_client.server_info()
+
         self.chats_collection = db[chats_coll_name]
         self.words_collection = db[words_coll_name]
         self.blacklist_collection = db[blacklist_coll_name]
 
 
     def in_blacklist(self, user_id):
-        #return (self.blacklist_collection.find({ "user_id": user_id }) != None)
-        return False
+        cur = self.blacklist_collection.find({ "user_id": user_id })
+        return (cur.count() != 0)
 
     def add_blacklist(self, user_id):
         self.blacklist_collection.insert_one({"user_id": user_id})
@@ -52,14 +55,16 @@ class DatabaseMongo:
         # SetOnInsert kertoo mitä muita kenttiä tehdään, jos luodaan uusi dokumentti
         self.chats_collection.update_one(
             { "chat_id": chat_id, "user_id": user_id },
-            {"$inc": countIncrementer},
+            { "$inc": countIncrementer },
             True
+        )
+        self.chats_collection.update_one(
+            { "chat_id": chat_id, "user_id": user_id },
+            { "$set": { "username" : username, "chat_title" : chat_title }, }
         )
 
     def get_counter_user(self, user_id, chat_id, counter):
-        user_data = self.chats_collection.find({ "chat_id": chat_id, "user_id": user_id })["count"]
-        
-        return user_data[counter]
+        return self.chats_collection.find({ "chat_id": chat_id, "user_id": user_id })[0]["count"][counter]
 
     def get_counter_top(self, chat_id, var, top_amount):
         cursor = self.chats_collection.aggregate([
@@ -69,16 +74,7 @@ class DatabaseMongo:
             { "$limit": top_amount }
         ])
 
-        topten_sorted = list(cursor)
-
-        text = ""
-        number = 1
-
-        for user in topten_sorted:
-            text += str(number) + ". " + user["username"] + ": " + str(user["count"]) + "\n"
-            number += 1
-
-        return text, len(topten_sorted)
+        return cursor
         
     def word_collection_add(self, user_id, chat_id, chat_title, username, \
         word, amount):

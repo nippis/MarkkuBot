@@ -15,7 +15,7 @@ class MessageRouter():
         printlog(update, "text")
 
         _, chat_id = get_ids(update)
-        # count_and_write(self.db, update, "messages")
+        count_and_write(self.db, update, "messages")
 
         sticker_list = masterlist.stickers
         message = update.message.text.lower()
