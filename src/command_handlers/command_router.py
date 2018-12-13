@@ -243,3 +243,19 @@ class CommandRouter():
 
         # Poista kaikki käyttäjän dokumentit
         self.db.add_blacklist(user_id)
+
+    def hallitus(self, bot, update):
+        printlog(update, "hallitus")
+        count_and_write(self.db, update, "commands")
+        _, chat_id = get_ids(update)
+
+        hallitus = masterlist.hallitus
+        huudot = masterlist.hallitus_huudot
+
+        lotto = random.randint(0, len(huudot) - 1)
+        reply = huudot[lotto] + "\n"
+
+        for i in hallitus:
+            reply += (i + " ")
+
+        bot.send_message(chat_id=chat_id, text=reply)    

@@ -31,6 +31,8 @@ def handlers(updater):
     dp.add_handler(CommandHandler('toptenkiitos', cr.topten_kiitos))
     dp.add_handler(CommandHandler('protip', cr.protip))
     dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
+    dp.add_handler(CommandHandler('hallitus', cr.hallitus))
+    
 
     # Blacklist
     dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
