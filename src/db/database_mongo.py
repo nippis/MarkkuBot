@@ -62,7 +62,7 @@ class DatabaseMongo:
         )
         self.chats_collection.update_one(
             { "chat_id": chat_id, "user_id": user_id },
-            { "$set": { "username" : username, "chat_title" : chat_title }, }
+            { "$set": { "username" : username, "chat_title" : chat_title }}
         )
 
     def get_counter_user(self, user_id, chat_id, counter):
@@ -83,8 +83,13 @@ class DatabaseMongo:
             
         self.words_collection.update_one(
             { "chat_id": chat_id, "user_id": user_id },
-            {"$inc": {word: amount}},
+            { "$inc": {word: amount}},
             True
+        )
+
+        self.chats_collection.update_one(
+            { "chat_id": chat_id, "user_id": user_id },
+            { "$set": { "username" : username, "chat_title" : chat_title }}
         )
 
     def word_collection_get_chat(self, chat_id):
