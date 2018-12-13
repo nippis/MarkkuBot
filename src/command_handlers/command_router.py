@@ -135,7 +135,7 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        list, number = toptenlist(self.db, chat_id, "count.kiitos")
+        list, number = toptenlist(self.db, chat_id, "kiitos")
 
         text = "Top " + str(number) + " kiitostelijat:\n" + list
 
@@ -147,9 +147,11 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        list, number = toptenlist(self.db, chat_id, "count.messages")
+        list, number = toptenlist(self.db, chat_id, "messages")
 
         text = "Top " + str(number) + " viestittelijät:\n" + list
+
+        print(text)
 
         bot.send_message(chat_id=chat_id, text=text)
 
@@ -186,7 +188,6 @@ class CommandRouter():
 
         
         if self.db.in_blacklist(user_id):
-            print("1")
             update.message.reply_text("Tietosi on jo poistettu, eikä sinua seurata.\n" \
                                     "Your information is already deleted and you are not tracked.")
             return
@@ -201,8 +202,6 @@ class CommandRouter():
                                 "Do you want to delete all of your personifiable information from Markku's database" \
                                 "and add your user to the \"do not track\" list?",
                                 reply_markup=reply_markup)
-
-        print("3")
 
     def remove_blacklist(self, bot, update):
         user_id, _ = get_ids(update)

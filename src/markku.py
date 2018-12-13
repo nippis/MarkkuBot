@@ -5,8 +5,6 @@ from os import environ
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
-from db.database_abstraction import DatabaseAbstraction
-from db.database_minimal import DatabaseMinimal #turha?
 from db.database_mongo import DatabaseMongo
 
 from command_handlers.command_router import CommandRouter
@@ -16,8 +14,8 @@ def handlers(updater):
     dp = updater.dispatcher
 
     # Avataan tietokanta
-    db_imp = DatabaseMongo() # TODO backendin valinta conffin kautta
-    db = DatabaseAbstraction(db_imp)
+    # TODO backendin valinta conffin kautta
+    db = DatabaseMongo()
 
     # Alustetaan routerit
     cr = CommandRouter(db)

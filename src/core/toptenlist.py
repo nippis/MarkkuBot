@@ -1,11 +1,18 @@
 def toptenlist(db, chat_id, var):
-    topten_sorted = db.get_counter_top(chat_id, var, 10)
+    topten_unsorted = db.get_counter_top(chat_id, var, 10)
+
+    counter = {}
+
+    for i in topten_unsorted:
+        counter[i["username"]] = i["count"]
 
     text = ""
     number = 1
 
-    for user in topten_sorted:
-        text += str(number) + ". " + str(user["username"]) + ": " + str(user["count"]) + "\n"
+    sorted_usernames = sorted(counter, key=counter.__getitem__, reverse=True)
+
+    for user in sorted_usernames:
+        text += str(number) + ". " + user + ": " + str(counter[user]) + "\n"
         number += 1
 
-    return text, len(topten_sorted)
+    return text, number - 1
