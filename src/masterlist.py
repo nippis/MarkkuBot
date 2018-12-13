@@ -100,3 +100,10 @@ hallitus = [
     "@Call_me_boss",
     "@eltsu7"
 ]
+
+hallitus_huudot = [
+    "MIKSEI HALLITUS TEE MITÄÄN!?",
+    "HAALLLITUUUUUUS!!!",
+    "TEHKÄÄ JOTAIN!",
+    "LOL APUA"
+]
