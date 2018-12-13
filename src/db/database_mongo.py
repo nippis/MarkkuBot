@@ -11,6 +11,7 @@ class DatabaseMongo:
         blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
         self.db_client = MongoClient("localhost:27017", serverSelectionTimeoutMS=1000)
+        # kontin sisällä mongodb://mongo:27017, työpöydällä localhost:27017
         db = self.db_client[db_name]
 
         self.db_client.server_info()
