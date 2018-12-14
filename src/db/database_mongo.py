@@ -21,6 +21,17 @@ class DatabaseMongo:
         self.words_collection = db[words_coll_name]
         self.blacklist_collection = db[blacklist_coll_name]
 
+        self.counters = [
+            "messages",
+            "stickers",
+            "photos",
+            "gifs",
+            "commands",
+            "kiitos"
+        ]
+
+    def get_counters(self):
+        return self.counters
 
     def in_blacklist(self, user_id):
         cur = self.blacklist_collection.find({ "user_id": user_id })

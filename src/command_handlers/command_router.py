@@ -129,7 +129,34 @@ class CommandRouter():
 
             bot.sendPhoto(chat_id=chat_id, photo=picture_link)
 
-    def topten_kiitos(self, bot, update): #TODO username
+    def topten(self, bot, update, args):
+        printlog(update, "topten")
+
+        _, chat_id = get_ids(update)
+        count_and_write(self.db, update, "commands")
+
+        # argumenttejä pitää olla vain yksi. ei errorviestiä koska tätä varmaan painetaan vahingossa usein
+        if len(args) != 1:
+            return
+
+        # db:ltä käytössä olevat laskurit
+        valid_counters = self.db.get_counters()
+
+        # errorviesti jos argumentti ei vastaa laskuria
+        if args[0] not in valid_counters:
+            counters = ", ".join(valid_counters)
+            reply = "Väärä laskurin nimi. Käytettävät laskurit: " + counters + "."
+            bot.send_message(chat_id=chat_id, text=reply)
+
+            return
+
+        list, number = toptenlist(self.db, chat_id, args[0])
+
+        text = "Top {} in {}:\n{}".format(str(number), args[0], list)
+
+        bot.send_message(chat_id=chat_id, text=text)
+
+    def topten_kiitos(self, bot, update):
         printlog(update, "toptenkiitos")
 
         _, chat_id = get_ids(update)
