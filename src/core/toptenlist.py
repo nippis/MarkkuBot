@@ -4,15 +4,23 @@ def toptenlist(db, chat_id, var):
     counter = {}
 
     for i in topten_unsorted:
-        counter[i["username"]] = i["count"]
+        if i["count"] != 0:
+            counter[i["username"]] = i["count"]
 
     text = ""
+    lista = ""
     number = 1
 
-    sorted_usernames = sorted(counter, key=counter.__getitem__, reverse=True)
+    if len(counter) == 0:
+        text = "'{}'-laskuri on kaikilla tyhjä.".format(var)
 
-    for user in sorted_usernames:
-        text += str(number) + ". " + user + ": " + str(counter[user]) + "\n"
-        number += 1
+    else:
+        sorted_usernames = sorted(counter, key=counter.__getitem__, reverse=True)
 
-    return text, number - 1
+        for user in sorted_usernames:
+            lista += str(number) + ". " + user + ": " + str(counter[user]) + "\n"
+            number += 1
+
+            text = "Top {} in {}:\n{}".format(len(counter), var, lista)
+
+    return text

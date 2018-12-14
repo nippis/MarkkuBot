@@ -150,9 +150,7 @@ class CommandRouter():
 
             return
 
-        list, number = toptenlist(self.db, chat_id, args[0])
-
-        text = "Top {} in {}:\n{}".format(str(number), args[0], list)
+        text = toptenlist(self.db, chat_id, args[0])
 
         bot.send_message(chat_id=chat_id, text=text)
 
@@ -162,9 +160,7 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        list, number = toptenlist(self.db, chat_id, "kiitos")
-
-        text = "Top " + str(number) + " kiitostelijat:\n" + list
+        text = toptenlist(self.db, chat_id, "kiitos")
 
         bot.send_message(chat_id=chat_id, text=text)
 
@@ -174,11 +170,7 @@ class CommandRouter():
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
-        list, number = toptenlist(self.db, chat_id, "messages")
-
-        text = "Top " + str(number) + " viestittelijät:\n" + list
-
-        print(text)
+        text = toptenlist(self.db, chat_id, "messages")
 
         bot.send_message(chat_id=chat_id, text=text)
 
