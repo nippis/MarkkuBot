@@ -249,13 +249,20 @@ class CommandRouter():
         count_and_write(self.db, update, "commands")
         _, chat_id = get_ids(update)
 
+        # haetaan hallituslaiset ja huudot masterlististä
         hallitus = masterlist.hallitus
         huudot = masterlist.hallitus_huudot
 
+        # arvotaan satunnainen huutelu
         lotto = random.randint(0, len(huudot) - 1)
         reply = huudot[lotto] + "\n"
 
+        # lisätään viestin perään hallituksen tgnimet
         for i in hallitus:
             reply += (i + " ")
 
-        bot.send_message(chat_id=chat_id, text=reply)    
+        # jos '/hallitus' viesti vastaa johonkin toiseen viestii, vastataan siihen
+        if update.message.reply_to_message != None:
+            bot.send_message(chat_id=chat_id, text=reply, reply_to_message_id=update.message.reply_to_message.message_id)
+        else:
+            bot.send_message(chat_id=chat_id, text=reply)    
