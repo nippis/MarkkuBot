@@ -27,11 +27,13 @@ def handlers(updater):
     dp.add_handler(CommandHandler('stats', cr.stats))
     dp.add_handler(CommandHandler('help', cr.help))
     dp.add_handler(CommandHandler('noutaja', cr.noutaja))
+    dp.add_handler(CommandHandler('topten', cr.topten, pass_args=True))
     dp.add_handler(CommandHandler('toptenmsg', cr.topten_messages))
     dp.add_handler(CommandHandler('toptenkiitos', cr.topten_kiitos))
     dp.add_handler(CommandHandler('protip', cr.protip))
     dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
     dp.add_handler(CommandHandler('hallitus', cr.hallitus))
+
     
 
     # Blacklist
