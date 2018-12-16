@@ -154,26 +154,6 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=text)
 
-    def topten_kiitos(self, bot, update):
-        printlog(update, "toptenkiitos")
-
-        _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
-
-        text = toptenlist(self.db, chat_id, "kiitos")
-
-        bot.send_message(chat_id=chat_id, text=text)
-
-    def topten_messages(self, bot, update):
-        printlog(update, "toptenmessages")
-
-        _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
-
-        text = toptenlist(self.db, chat_id, "messages")
-
-        bot.send_message(chat_id=chat_id, text=text)
-
     def protip(self, bot, update):
         printlog(update, "protip")
 
