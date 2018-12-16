@@ -13,8 +13,8 @@ from message_handlers.message_router import MessageRouter
 def handlers(updater):
     dp = updater.dispatcher
 
-    # Avataan tietokanta
     # TODO backendin valinta conffin kautta
+    # Avataan tietokanta
     db = DatabaseMongo()
 
     # Alustetaan routerit
@@ -28,13 +28,9 @@ def handlers(updater):
     dp.add_handler(CommandHandler('help', cr.help))
     dp.add_handler(CommandHandler('noutaja', cr.noutaja))
     dp.add_handler(CommandHandler('topten', cr.topten, pass_args=True))
-    dp.add_handler(CommandHandler('toptenmsg', cr.topten_messages))
-    dp.add_handler(CommandHandler('toptenkiitos', cr.topten_kiitos))
     dp.add_handler(CommandHandler('protip', cr.protip))
     dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
     dp.add_handler(CommandHandler('hallitus', cr.hallitus))
-
-    
 
     # Blacklist
     dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
@@ -53,13 +49,6 @@ def main():
     handlers(updater)
 
     updater.start_polling()
-
-#masterlist = file_read("masterlist.json")
-#sticker_list = masterlist["Stickers"]
-#protip_list = masterlist["Tips"]
-#camera_list = masterlist["Cameras"]
-#
-#tg_token = environ["TG_TOKEN"]
 
 
 main()
