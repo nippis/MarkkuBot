@@ -1,3 +1,4 @@
+import sys
 from os import environ  
 from pymongo import ASCENDING, MongoClient
 from pymongo import errors as MongoErrors
@@ -10,9 +11,14 @@ class DatabaseMongo:
         words_coll_name = environ["WORDS_COLL_NAME"]
         blacklist_coll_name = environ["BLACKLIST_COLL_NAME"]
 
-        # kontin sisällä mongodb://mongo:27017, työpöydällä localhost:27017
-        self.db_client = MongoClient("mongodb://mongo:27017", serverSelectionTimeoutMS=1000)
-        # self.db_client = MongoClient("localhost:27017", serverSelectionTimeoutMS=1000)
+        
+        # lisäargumentilla 'local' db:n osoite vaihtuu localhostiin testauksen helpottamiseksi
+        if len(sys.argv) == 2 and sys.argv[1] == 'local':
+            db_address = "localhost:27017"
+        else:
+            db_address = "mongodb://mongo:27017"
+            
+        self.db_client = MongoClient(db_address, serverSelectionTimeoutMS=1000)
         db = self.db_client[db_name]
 
         self.db_client.server_info()
