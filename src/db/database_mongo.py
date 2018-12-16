@@ -101,7 +101,7 @@ class DatabaseMongo:
             
         self.words_collection.update_one(
             { "chat_id": chat_id, "user_id": user_id },
-            { "$inc": {word: amount}},
+            { "$inc": {"words." + str(word): amount}},
             True
         )
 
