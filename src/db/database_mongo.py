@@ -114,5 +114,5 @@ class DatabaseMongo:
         return "jtn2"
 
     def word_collection_get_chat_user(self, chat_id, user_id):
-        return "jtn"
+        return self.words_collection.find({ "chat_id": chat_id, "user_id": user_id })
 
