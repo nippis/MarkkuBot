@@ -40,7 +40,7 @@ class CommandRouter():
         counters = self.db.get_counters()
 
         user_counters = {}
-        msg = "@{}:".format(update.message.from_user.username)
+        msg = "@{}<code>:".format(update.message.from_user.username)
 
         for i in counters:
             user_counters[i] = self.db.get_counter_user(user_id, chat_id, i)
@@ -48,11 +48,12 @@ class CommandRouter():
         counter_sum = sum(user_counters.values())
 
         for counter in user_counters:
-            msg += "\n{}: {}".format(counter.capitalize(), user_counters[counter])
+            msg += "\n{:<10}{:>4} ({:>4}%)".format(counter.capitalize() + ":",
+                 user_counters[counter], round(user_counters[counter] / counter_sum * 100, 1) )
 
-        msg += "\nTotal: {}".format(counter_sum)
+        msg += "\n{:<10}{:>4}</code>".format("Total:", counter_sum)
      
-        bot.send_message(chat_id=chat_id, text=msg)
+        bot.send_message(chat_id=chat_id, text=msg, parse_mode='HTML')
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
     def darkroom(self, bot, update):
