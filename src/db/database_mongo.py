@@ -31,9 +31,9 @@ class DatabaseMongo:
             "messages",
             "stickers",
             "photos",
+            "kiitos",
             "gifs",
             "commands",
-            "kiitos"
         ]
 
     def get_counters(self):
