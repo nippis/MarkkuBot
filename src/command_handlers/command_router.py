@@ -37,25 +37,21 @@ class CommandRouter():
                                     "Markku does not track you. Use the command /unblacklist to enable tracking.")
             return
 
-        count_messages = self.db.get_counter_user(user_id, chat_id, "messages")
-        count_stickers = self.db.get_counter_user(user_id, chat_id, "stickers")
-        count_kiitos = self.db.get_counter_user(user_id, chat_id, "kiitos")
-        count_photos = self.db.get_counter_user(user_id, chat_id, "photos")
+        counters = self.db.get_counters()
 
-        sticker_percent = 0
-        kiitos_percent = 0
+        user_counters = {}
+        msg = "@{}:".format(update.message.from_user.username)
 
-        if count_stickers + count_messages != 0:
-            sticker_percent = round((count_stickers / (count_stickers+count_messages) * 100), 2)
-        
-        if count_messages != 0:
-            kiitos_percent = round((count_kiitos / count_messages * 100), 2)
+        for i in counters:
+            user_counters[i] = self.db.get_counter_user(user_id, chat_id, i)
 
-        msg = "@{}:\nMessages: {}".format(update.message.from_user.username, count_messages)
-        msg += "\nStickers: {} ({}%)".format(count_stickers, sticker_percent)
-        msg += "\nKiitos: {} ({}%)".format(count_kiitos, kiitos_percent)
-        msg += "\nPhotos: {}".format(count_photos)        
+        counter_sum = sum(user_counters.values())
 
+        for counter in user_counters:
+            msg += "\n{}: {}".format(counter.capitalize(), user_counters[counter])
+
+        msg += "\nTotal: {}".format(counter_sum)
+     
         bot.send_message(chat_id=chat_id, text=msg)
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
