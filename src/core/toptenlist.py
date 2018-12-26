@@ -21,6 +21,6 @@ def toptenlist(db, chat_id, var):
             lista += str(number) + ". " + user + ": " + str(counter[user]) + "\n"
             number += 1
 
-            text = "Top {} in {}:\n{}".format(len(counter), var, lista)
+            text = "Top {} laskurissa {}:\n{}".format(len(counter), var, lista)
 
     return text
