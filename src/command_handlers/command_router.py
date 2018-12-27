@@ -95,19 +95,19 @@ class CommandRouter():
         count_and_write(self.db, update, "commands")
 
         reply = "Komennot:\n" \
-                "/darkroom - Kertoo onko joku pimiöllä\n" \
-                "/stats - Chattikohtaiset statsit\n" \
-                "/toptenmsg - Chatin kovimmat viestittelijät\n"\
-                "/toptenkiitos - Chatin kovimmat kiitostelijat\n"\
-                "/noutaja - Postaa satunnaisen noutajakuvan\n"\
+                "/darkroom - Kertoo onko joku pimiöllä.\n" \
+                "/stats - Chattikohtaiset statsit.\n" \
+                "/topten <i>laskuri</i> - Paljastaa chatin spämmibotit.\n"\
+                "/noutaja - Postaa satunnaisen noutajakuvan.\n"\
                 "/protip - Antaa ammatti valo kuvaus vinkin!\n"\
-                "/blacklist - Poista omat tietosi Markun tietokannasta ja estä uusien tallentaminen, lähetä privana Markulle\n"\
-                "/unblacklist - Salli omien tietojesi tallentaminen blacklist-komennon jälkeen, lähetä privana Markulle\n"\
+                "/blacklist - Poistaa lähettäjän datat tietokannasta ja estää uusien tallentamisen.\n"\
+                "/unblacklist - Sallii omien tietojen tallentamisen blacklist-komennon jälkeen.\n"\
                 "\n" \
                 "Botin koodit: @eltsu7, @kulmajaba ja @anttimoi\n" \
+                "https://github.com/eltsu7/MarkkuBot\n" \
                 "Valosensorit ja siihen koodit: @anttimoi"
 
-        bot.send_message(chat_id=chat_id, text=reply)            
+        bot.send_message(chat_id=chat_id, text=reply, parse_mode='HTML')            
 
     def noutaja(self, bot, update):
         printlog(update, "noutaja")
