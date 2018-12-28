@@ -47,7 +47,10 @@ tips = [
     "Parhaat kuvat sisältää aina vähän syntiä :)",
     "Muistakaa käyttää P(rofessional)-modee",
     "Kovalevytila on halpaa ja pilvipalvelut rajattomia <3",
-    "Valovoima on ylivoimaa"
+    "Valovoima on ylivoimaa",
+    "Laskeudu koiran tasolle",
+    "Pidä kädessäsi lelua tai ruokaa ja heiluttele sitä linssin ympärillä",
+    "Kärsivällisyyttä"
 ]
 stickers = [
     "CAADAgADHgEAAiHfMQE_pcz3yBGAdwI",
