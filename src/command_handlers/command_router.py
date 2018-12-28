@@ -41,15 +41,20 @@ class CommandRouter():
 
         user_counters = {}
         msg = "@{}<code>:".format(update.message.from_user.username)
+        counter_sum = 0
 
         for i in counters:
             user_counters[i] = self.db.get_counter_user(user_id, chat_id, i)
-
-        counter_sum = sum(user_counters.values())
+            if i != "kiitos":
+                counter_sum += user_counters[i]
 
         for counter in user_counters:
-            msg += "\n{:<10}{:>4} ({:>4}%)".format(counter.capitalize() + ":",
-                 user_counters[counter], round(user_counters[counter] / counter_sum * 100, 1) )
+            if counter == "kiitos":
+                msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
+
+            else:
+                msg += "\n{:<10}{:>4} ({:>4}%)".format(counter.capitalize() + ":",
+                    user_counters[counter], round(user_counters[counter] / counter_sum * 100, 1) )
 
         msg += "\n{:<10}{:>4}</code>".format("Total:", counter_sum)
      
