@@ -29,8 +29,8 @@ class DatabaseMongo:
 
         self.counters = [
             "messages",
-            "stickers",
             "kiitos",
+            "stickers",
             "photos",
             "gifs",
             "commands",
