@@ -40,13 +40,17 @@ class CommandRouter():
         counters = self.db.get_counters()
 
         user_counters = {}
-        msg = "@{}<code>:".format(update.message.from_user.username)
         counter_sum = 0
 
+        # Haetaan käyttäjän laskurien arvot databaseltä
         for i in counters:
             user_counters[i] = self.db.get_counter_user(user_id, chat_id, i)
             if i != "kiitos":
                 counter_sum += user_counters[i]
+
+        # Muodostetaan lähetettävä viesti
+        msg = "@{}<code>:".format(update.message.from_user.username)
+        msg += "\n{:<10}{:>4}".format("Total:", counter_sum)
 
         for counter in user_counters:
             if counter == "kiitos":
@@ -56,8 +60,9 @@ class CommandRouter():
                 msg += "\n{:<10}{:>4} ({:>4}%)".format(counter.capitalize() + ":",
                     user_counters[counter], round(user_counters[counter] / counter_sum * 100, 1) )
 
-        msg += "\n{:<10}{:>4}</code>".format("Total:", counter_sum)
+        msg += "</code>"
      
+        # Lähetetään viesti. parse_mode mahdollistaa html-muotoilun viestissä
         bot.send_message(chat_id=chat_id, text=msg, parse_mode='HTML')
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
