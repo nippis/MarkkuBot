@@ -18,6 +18,8 @@ Markun saa ajoon komennolla `docker run -it --link=joku_kontti:mongo --rm --env-
 
 Kehittäessä voi myös ajaa Markkua docker composen avulla, mutta se muuttaa tiettyjä juttuja. Testaus käytännössä Tuotantojulkaisun mukaisesti, mutta deploylle:lle annetaan `docker-compose-dev.yml` joka lisää stackiin mongo-express -web-UI:n MongoDB datan tutkailuun. **MONGO-EXPRESS EI SAA MENNÄ TUOTANTOON.** Mongo-expressin käli löytyy osoitteesta http://localhost:8081
 
+**Kehitys ilman Dockeria**: MongoDB-serveri tulee olla käynnissä ja sieltä tulee löytyä .env-tiedoston nimeämät tietokannat ja taulut. Markun saa pystyyn komentoriviltä komennolla `python markku.py local`, missä argumentti `local` käskee DatabaseMongo-luokan ottaa yhteyden osoitteeseen `localhost:27017`, mikä on MongoDB:n oletusosoite. Tietokantaa voi kurkkia MongoDB Compass -sovelluksella. 
+
 ### 🚧 WIP 🚧 Tuotanto
 
 *Tähän saadaan toivottavasti automatisointi jatkossa, eli Githubin commitista tai tagista automaattinen buildi Docker Hubiin ja sieltä ajoon. Siihen asti mennään nykyisellä manuaalisemmalla tavalla.*
