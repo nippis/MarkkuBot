@@ -50,7 +50,8 @@ tips = [
     "Valovoima on ylivoimaa",
     "Laskeudu koiran tasolle",
     "Pidä kädessäsi lelua tai ruokaa ja heiluttele sitä linssin ympärillä",
-    "Kärsivällisyyttä"
+    "Kärsivällisyyttä",
+    "Vaimoni on Sääksmäeltä.\n -markku"
 ]
 stickers = [
     "CAADAgADHgEAAiHfMQE_pcz3yBGAdwI",
