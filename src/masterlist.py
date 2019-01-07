@@ -90,19 +90,12 @@ stickers = [
 
 hallitus = [
     "***REMOVED***",
+    "@eltsu7",
     "***REMOVED***",
     "***REMOVED***",
     "***REMOVED***",
     "***REMOVED***",
     "***REMOVED***",
-    "***REMOVED***",
-    "***REMOVED***",
-    "***REMOVED***",
-    "@anttimoi",
-    "***REMOVED***",
-    "***REMOVED***",
-    "***REMOVED***",
-    "@eltsu7"
 ]
 
 hallitus_huudot = [
