@@ -89,20 +89,13 @@ stickers = [
 ]
 
 hallitus = [
-    "@nopppanen",
-    "@Millav",
-    "@Kryosa",
-    "@BioPaavo",
-    "@kkaitsu",
-    "@Zyrkki",
-    "@Lamminen",
-    "@munlempinorsuonbabar",
     "@billsh",
-    "@anttimoi",
-    "@Kiviluoma",
+    "@eltsu7",
+    "@Proscribo",
+    "@munlempinorsuonbabar",
     "@rTzii",
+    "@Juhishhh",
     "@Call_me_boss",
-    "@eltsu7"
 ]
 
 hallitus_huudot = [
