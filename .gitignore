@@ -1,6 +1,8 @@
 .DS_Store
 .env
 .idea/
-db/
+.vscode/
+/db/
 settings.json
 teksti.txt
+*.pyc
