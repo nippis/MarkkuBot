@@ -88,16 +88,6 @@ stickers = [
     "CAADAgADQQEAAiHfMQFYXPeFrSBPuwI"
 ]
 
-hallitus = [
-    "@billsh",
-    "@eltsu7",
-    "@Proscribo",
-    "@munlempinorsuonbabar",
-    "@rTzii",
-    "@Juhishhh",
-    "@Call_me_boss",
-]
-
 hallitus_huudot = [
     "MIKSEI HALLITUS TEE MITÄÄN!?",
     "HAALLLITUUUUUUS!!!",
