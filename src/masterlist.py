@@ -16,7 +16,9 @@ cameras = {
         "Rollei",
         "Mamiya",
         "Fujifilm",
-        "iPhone"
+        "iPhone",
+        "Phase One",
+        "Sinar"
     ]
 }
 
@@ -51,8 +53,12 @@ tips = [
     "Laskeudu koiran tasolle",
     "Pidä kädessäsi lelua tai ruokaa ja heiluttele sitä linssin ympärillä",
     "Kärsivällisyyttä",
-    "Vaimoni on Sääksmäeltä.\n -markku"
+    "Vaimoni on Sääksmäeltä.\n -markku",
+    "Muuta Sastamalaan",
+    "Älä osta presettejä!",
+    "Sammuta kamera kun irroitat vakaajallista putkea"
 ]
+
 stickers = [
     "CAADAgADHgEAAiHfMQE_pcz3yBGAdwI",
     "CAADAgADHwEAAiHfMQEXT1Wc5kaV8gI",
@@ -86,11 +92,4 @@ stickers = [
     "CAADAgADPgEAAiHfMQEBK8_HYkAw-AI",
     "CAADAgADPwEAAiHfMQHrlpGey2GaBAI",
     "CAADAgADQQEAAiHfMQFYXPeFrSBPuwI"
-]
-
-hallitus_huudot = [
-    "MIKSEI HALLITUS TEE MITÄÄN!?",
-    "HAALLLITUUUUUUS!!!",
-    "TEHKÄÄ JOTAIN!",
-    "HALOO"
 ]
