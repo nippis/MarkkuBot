@@ -90,15 +90,21 @@ class DatabasePsql:
 
         
     def word_collection_add(self, user_id, chat_id, word, amount):
+        # tämäkin vielä bork
+        
         sql = "insert into {} where user_id = {} and chat_id = {} values"
+        self.cursor.execute(sql.format())
 
     def word_collection_get_chat(self, chat_id):
-        pass
+        # tätä ei käytetä vielä missään, en tiedä miten pitäisi tehdä
+
+        sql = "select * from word where chat_id = {};"
+        self.cursor.execute(sql.format(chat_id))
+
+        return self.cursor.fetchall()
 
     def word_collection_get_chat_user(self, chat_id, user_id):
         pass
 
 if __name__ == "__main__":
     asd = DatabasePsql()
-
-    asd.get_counter_top(-1001162147452, "messages", 10)
