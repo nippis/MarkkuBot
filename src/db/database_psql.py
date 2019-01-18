@@ -57,10 +57,10 @@ class DatabasePsql:
         self.conn.commit()
 
     def increment_counter(self, user_id, chat_id, counter, amount):
-        # TODO mitä jos rivii ei oo?
+        sql =   "insert into {0} (user_id, chat_id, {1}) values ({2}, {3}, {4})" \
+                "on conflict do update set {1} += EXCLUDED.{1}"
 
-        sql = "update {0} set {1} = {1} + {2} where user_id = {3} and chat_id = {4};"
-        self.cursor.execute(sql.format(self.table_counter, counter, amount, user_id, chat_id))
+        self.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
         self.conn.commit()
 
     def get_counter_user(self, user_id, chat_id, counter):
@@ -90,13 +90,14 @@ class DatabasePsql:
 
         
     def word_collection_add(self, user_id, chat_id, word, amount):
-        # tämäkin vielä bork
-        
-        sql = "insert into {} where user_id = {} and chat_id = {} values"
-        self.cursor.execute(sql.format())
+        sql =   "insert into {0} values ({1}, {2}, {3}, {4})" \
+                "on conflict do update set {4} += EXCLUDED.{4}"
+
+        self.cursor.execute(sql.format(self.table_word, user_id, chat_id, word, amount))
+        self.conn.commit()
 
     def word_collection_get_chat(self, chat_id):
-        # tätä ei käytetä vielä missään, en tiedä miten pitäisi tehdä
+        # TODO tätä ei käytetä vielä missään, en tiedä miten pitäisi tehdä
 
         sql = "select * from word where chat_id = {};"
         self.cursor.execute(sql.format(chat_id))
