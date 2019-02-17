@@ -22,9 +22,6 @@ class DatabasePsql:
             port=db_port
         )
 
-        self.conn = psycopg2.connect("dbname=eltsu7 user=eltsu7")
-
-
         self.cursor = self.conn.cursor()
 
 
@@ -57,36 +54,35 @@ class DatabasePsql:
         self.conn.commit()
 
     def increment_counter(self, user_id, chat_id, counter, amount):
-        sql =   "insert into {0} (user_id, chat_id, {1}) values ({2}, {3}, {4})" \
-                "on conflict do update set {1} += EXCLUDED.{1}"
+        sql =   "INSERT INTO {0} (user_id, chat_id, {1}) VALUES ({2}, {3}, {4})" \
+                "ON CONFLICT DO UDPATE SET {1} += EXCLUDED.{1}"
 
         self.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
         self.conn.commit()
 
     def get_counter_user(self, user_id, chat_id, counter):
-        sql = "select {} from {} where user_id = {} and chat_id = {};"
+        sql =   "SELECT {} " \
+                "FROM {} " \
+                "WHERE user_id = {} AND chat_id = {};"
         self.cursor.execute(sql.format(counter, self.table_counter, user_id, chat_id))
         
         return self.cursor.fetchone()[0]
 
     def get_counter_top(self, chat_id, counter, top_amount):
-        # TODO tämän voi tehdä jollain join hommalla??
 
-        sql = "select user_id, {0} from {1} where chat_id = {2} order by {0} desc limit {3};"
-        self.cursor.execute(sql.format(counter, self.table_counter, chat_id, top_amount))
+        sql =   "SELECT {0}.{2}, {1}.name " \
+                "FROM {0} " \
+                "INNER JOIN {1} " \
+                "ON {0}.user_id = {1}.id " \
+                "WHERE {0}.chat_id={3} " \
+                "ORDER BY {0}.{2} DESC " \
+                "LIMIT {4};"
 
-        counter_top = {}
+        self.cursor.execute(sql.format(self.table_counter, self.table_name, counter, chat_id, top_amount))
 
-        results = self.cursor.fetchall()
+        res = self.cursor.fetchall()
 
-        for res in results:
-            self.cursor.execute("select name from {} where id = {}".format(self.table_name, res[0]))
-
-            username = self.cursor.fetchone()[0]
-
-            counter_top[username] = res[1]
-
-        return counter_top
+        return dict((y, x) for x, y in res)
 
         
     def word_collection_add(self, user_id, chat_id, word, amount):
