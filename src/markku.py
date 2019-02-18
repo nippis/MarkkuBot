@@ -5,7 +5,7 @@ from os import environ
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
 
-from db.database_mongo import DatabaseMongo
+from db.database_psql import DatabasePsql
 
 from command_handlers.command_router import CommandRouter
 from message_handlers.message_router import MessageRouter
@@ -15,7 +15,7 @@ def handlers(updater):
 
     # TODO backendin valinta conffin kautta
     # Avataan tietokanta
-    db = DatabaseMongo()
+    db = DatabasePsql()
 
     # Alustetaan routerit
     cr = CommandRouter(db)

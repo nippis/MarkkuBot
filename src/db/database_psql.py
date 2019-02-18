@@ -15,6 +15,8 @@ class DatabasePsql:
         self.table_word =       environ["PSQL_TABLE_WORD"]
         self.table_blacklist =  environ["PSQL_TABLE_BLACKLIST"]
 
+        print(db_name, db_user, db_pass, db_host, db_port)
+
         self.conn = psycopg2.connect(
             dbname=db_name,
             user=db_user,
