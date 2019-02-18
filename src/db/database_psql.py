@@ -38,37 +38,51 @@ class DatabasePsql:
         return self.counters
 
     def in_blacklist(self, user_id):
-        sql = "select 1 from {} where user_id = {};"
+        sql =   "SELECT 1 " \
+                "FROM {} " \
+                "WHERE user_id = {};"
+
         self.cursor.execute(sql.format(self.table_blacklist, user_id))
 
         return self.cursor.fetchone() is not None
 
     def add_blacklist(self, user_id):
-        sql = "insert into {} values ({});"
+        sql =   "INSERT INTO {} " \
+                "values ({});"
+        
         self.cursor.execute(sql.format(self.table_blacklist, user_id))
         self.conn.commit()
 
     def remove_blacklist(self, user_id):
-        sql = "delete from {} where user_id = {};"
+        sql =   "DELETE from {} " \
+                "WHERE user_id = {};"
+
         self.cursor.execute(sql.format(self.table_blacklist, user_id))
         self.conn.commit()
 
     def increment_counter(self, user_id, chat_id, counter, amount):
-        sql =   "INSERT INTO {0} (user_id, chat_id, {1}) VALUES ({2}, {3}, {4})" \
-                "ON CONFLICT DO UDPATE SET {1} += EXCLUDED.{1}"
+        sql =   "INSERT INTO {0} (user_id, chat_id, {1}) " \
+                "VALUES ({2}, {3}, {4}) " \
+                "ON CONFLICT (user_id, chat_id) DO UPDATE " \
+                "SET {1} = {0}.{1} + {4};"
 
         self.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
         self.conn.commit()
 
     def get_counter_user(self, user_id, chat_id, counter):
+        # palauttaa käyttäjä, chätti parin laskurin
+
         sql =   "SELECT {} " \
                 "FROM {} " \
                 "WHERE user_id = {} AND chat_id = {};"
+
         self.cursor.execute(sql.format(counter, self.table_counter, user_id, chat_id))
         
         return self.cursor.fetchone()[0]
 
     def get_counter_top(self, chat_id, counter, top_amount):
+        # nimitaulusta nimet, countterista laskurin arvo
+        # kursori antaa ne tupleina -> muutetaan dictiin ja palautetaan
 
         sql =   "SELECT {0}.{2}, {1}.name " \
                 "FROM {0} " \
@@ -86,8 +100,13 @@ class DatabasePsql:
 
         
     def word_collection_add(self, user_id, chat_id, word, amount):
-        sql =   "insert into {0} values ({1}, {2}, {3}, {4})" \
-                "on conflict do update set {4} += EXCLUDED.{4}"
+        # user, chat, sana yhdistelmät uniikkeja
+        # jos ei löydy -> lisätään, jos löytyy, lisätään amount counttiin
+
+        sql =   "INSERT INTO {0} (user_id, chat_id, word, count) " \
+                "VALUES ({1}, {2}, '{3}', {4}) " \
+                "ON CONFLICT (user_id, chat_id, word) DO UPDATE " \
+                "SET count = {0}.count + {4}; "
 
         self.cursor.execute(sql.format(self.table_word, user_id, chat_id, word, amount))
         self.conn.commit()
