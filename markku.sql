@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS counter (
     messages    INT     DEFAULT 0,
     photos      INT     DEFAULT 0,
     stickers    INT     DEFAULT 0,
-    PRIMARY KEY(user_id, chat_id)
+    PRIMARY KEY (user_id, chat_id)
 );
 
 CREATE TABLE IF NOT EXISTS word (
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS word (
     chat_id     BIGINT  NOT NULL,
     word        VARCHAR(30) NOT NULL,
     count       INT DEFAULT 0
+    PRIMARY KEY (user_id, chat_id, word)
 );
 
 CREATE TABLE IF NOT EXISTS blacklist (
