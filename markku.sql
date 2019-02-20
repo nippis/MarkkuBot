@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS word (
     user_id     BIGINT  NOT NULL,
     chat_id     BIGINT  NOT NULL,
     word        VARCHAR(30) NOT NULL,
-    count       INT DEFAULT 0
+    count       INT DEFAULT 0,
     PRIMARY KEY (user_id, chat_id, word)
 );
 

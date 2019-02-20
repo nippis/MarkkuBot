@@ -27,8 +27,8 @@ class DatabasePsql:
 
         self.cursor = self.conn.cursor()
 
+        # luodaan tarvittavat taulut jos niitä ei ole
         markkuschema = open("markku.sql", "r")
-
         self.cursor.execute(markkuschema.read())
 
         self.counters = [
