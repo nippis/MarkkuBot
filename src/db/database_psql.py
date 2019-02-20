@@ -27,6 +27,9 @@ class DatabasePsql:
 
         self.cursor = self.conn.cursor()
 
+        markkuschema = open("markku.sql", "r")
+
+        self.cursor.execute(markkuschema.read())
 
         self.counters = [
             "messages",
