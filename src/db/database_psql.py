@@ -41,6 +41,7 @@ class DatabasePsql:
     def get_counters(self):
         return self.counters
 
+
     def in_blacklist(self, user_id):
         sql =   "SELECT 1 " \
                 "FROM {} " \
@@ -49,6 +50,18 @@ class DatabasePsql:
         self.cursor.execute(sql.format(self.table_blacklist, user_id))
 
         return self.cursor.fetchone() is not None
+
+
+    def update_name(self, id, name):
+        sql =   "INSERT INTO {0} (id, name) " \
+                "VALUES ({1}, {2}) " \
+                "ON CONFLICT (id) DO UPDATE " \
+                "SET name = {2};"        
+
+        self.cursor.execute(sql.format(self.table_name, id, name))
+
+        self.conn.commit()
+
 
     def add_blacklist(self, user_id):
         sql =   "INSERT INTO {0} " \
@@ -65,12 +78,14 @@ class DatabasePsql:
 
         self.conn.commit()
 
+
     def remove_blacklist(self, user_id):
         sql =   "DELETE from {} " \
                 "WHERE user_id = {};"
 
         self.cursor.execute(sql.format(self.table_blacklist, user_id))
         self.conn.commit()
+
 
     def increment_counter(self, user_id, chat_id, counter, amount):
         # inkrementoidaan, jossei riviä ole, lisätään se
@@ -83,6 +98,7 @@ class DatabasePsql:
         self.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
         self.conn.commit()
 
+
     def get_counter_user(self, user_id, chat_id, counter):
         # palauttaa käyttäjä, chätti parin laskurin
 
@@ -93,6 +109,7 @@ class DatabasePsql:
         self.cursor.execute(sql.format(counter, self.table_counter, user_id, chat_id))
         
         return self.cursor.fetchone()[0]
+
 
     def get_counter_top(self, chat_id, counter, top_amount):
         # nimitaulusta nimet, countterista laskurin arvo
@@ -125,6 +142,7 @@ class DatabasePsql:
         self.cursor.execute(sql.format(self.table_word, user_id, chat_id, word, amount))
         self.conn.commit()
 
+
     def word_collection_get_chat(self, chat_id):
         # TODO tätä ei käytetä vielä missään, en tiedä miten pitäisi tehdä
 
@@ -132,6 +150,7 @@ class DatabasePsql:
         self.cursor.execute(sql.format(chat_id))
 
         return self.cursor.fetchall()
+
 
     def word_collection_get_chat_user(self, chat_id, user_id):
         pass
