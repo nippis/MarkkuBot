@@ -15,8 +15,6 @@ class DatabasePsql:
         self.table_word =       environ["PSQL_TABLE_WORD"]
         self.table_blacklist =  environ["PSQL_TABLE_BLACKLIST"]
 
-        print(db_name, db_user, db_pass, db_host, db_port)
-
         self.conn = psycopg2.connect(
             dbname=db_name,
             user=db_user,
@@ -67,6 +65,8 @@ class DatabasePsql:
         self.conn.commit()
 
     def increment_counter(self, user_id, chat_id, counter, amount):
+        # inkrementoidaan, jossei riviä ole, lisätään se
+
         sql =   "INSERT INTO {0} (user_id, chat_id, {1}) " \
                 "VALUES ({2}, {3}, {4}) " \
                 "ON CONFLICT (user_id, chat_id) DO UPDATE " \
