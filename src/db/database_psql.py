@@ -51,10 +51,18 @@ class DatabasePsql:
         return self.cursor.fetchone() is not None
 
     def add_blacklist(self, user_id):
-        sql =   "INSERT INTO {} " \
-                "values ({});"
+        sql =   "INSERT INTO {0} " \
+                "VALUES ({4});" \
+                " " \
+                "DELETE FROM {1} " \
+                "WHERE id={4}; " \
+                "DELETE FROM {2} " \
+                "WHERE user_id={4}; " \
+                "DELETE FROM {3} " \
+                "WHERE user_id={4}; " \
         
-        self.cursor.execute(sql.format(self.table_blacklist, user_id))
+        self.cursor.execute(sql.format(self.table_blacklist, self.table_name, self.table_counter, self.table_word, user_id))
+
         self.conn.commit()
 
     def remove_blacklist(self, user_id):
