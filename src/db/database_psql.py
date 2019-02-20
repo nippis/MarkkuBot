@@ -21,6 +21,7 @@ class DatabasePsql:
             dbname=db_name,
             user=db_user,
             password=db_pass,
+            host=db_host,
             port=db_port
         )
 

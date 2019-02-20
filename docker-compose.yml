@@ -1,4 +1,4 @@
-version: "3"
+version: "3.3"
 services:
   markkubot:
     build: .
@@ -7,8 +7,12 @@ services:
     - db
   db:
     image: postgres
+    environment:
+      POSTGRES_USER: eltsu7
+      POSTGRES_PASSWORD: kaljaa
+      POSTGRES_DB: markku
     ports:
-      - "5433:5432"
+    - "5432:5432"
     volumes:
     - data-volume:/data/db
 volumes:
