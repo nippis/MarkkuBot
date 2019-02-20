@@ -36,4 +36,4 @@ def parse_and_count(db, update):
 
     # lisätään sanat db:n sanacountteriin
     for word in wordCount:
-        db.word_collection_add(user_id, chat_id, chat_title, username, word, wordCount[word])
+        db.word_collection_add(user_id, chat_id, word, wordCount[word])
