@@ -54,7 +54,11 @@ class CommandRouter():
 
         for counter in user_counters:
             if counter == "kiitos":
-                msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
+                if user_counters["messages"] != 0:
+                    msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
+                else:
+                    msg += "\n└ ??% Kiitosta"
+
 
             else:
                 msg += "\n{:<10}{:>4} ({:>4}%)".format(counter.capitalize() + ":",
