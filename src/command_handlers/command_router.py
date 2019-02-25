@@ -17,6 +17,11 @@ class CommandRouter():
     def __init__(self, db):
         self.db = db
 
+    def route_command(self, bot, update, command):
+        update.message.reply_text(command)
+
+
+
     def start(self, bot, update):
         printlog(update, "start")
 

@@ -22,14 +22,14 @@ def handlers(updater):
     mr = MessageRouter(db)
 
     # Komentojen kautta toimivat
-    dp.add_handler(CommandHandler('start', cr.start))
-    dp.add_handler(CommandHandler('darkroom', cr.darkroom))
-    dp.add_handler(CommandHandler('stats', cr.stats))
-    dp.add_handler(CommandHandler('help', cr.help))
-    dp.add_handler(CommandHandler('noutaja', cr.noutaja))
-    dp.add_handler(CommandHandler('topten', cr.topten, pass_args=True))
-    dp.add_handler(CommandHandler('protip', cr.protip))
-    dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
+    dp.add_handler(CommandHandler('start',      add_param(cr.route_command, "start")))
+    dp.add_handler(CommandHandler('darkroom',   cr.darkroom))
+    dp.add_handler(CommandHandler('stats',      cr.stats))
+    dp.add_handler(CommandHandler('help',       cr.help))
+    dp.add_handler(CommandHandler('noutaja',    cr.noutaja))
+    dp.add_handler(CommandHandler('topten',     cr.topten, pass_args=True))
+    dp.add_handler(CommandHandler('protip',     cr.protip))
+    dp.add_handler(CommandHandler('kysymys',    cr.camera_versus))
 
     # Blacklist
     dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
@@ -42,6 +42,11 @@ def handlers(updater):
     dp.add_handler(MessageHandler(Filters.photo, mr.msg_photo))
     dp.add_handler(MessageHandler(Filters.document, mr.msg_gif))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, mr.status_new_members))
+
+def add_param(funcToCall, paramToPass):
+    def localFunction(bot, update):
+        funcToCall(bot, update, paramToPass)
+    return localFunction
 
 def main():
     updater = Updater(token=environ["TG_TOKEN"])
