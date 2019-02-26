@@ -31,9 +31,17 @@ class CommandRouter():
 
     def route_command(self, bot, update, command, args):
         printlog(update, command)
-
         count_and_write(self.db, update, "commands")
 
+        username = update.message.from_user.username
+        chat_title = update.message.chat.title
+        user_id, chat_id = get_ids(update)
+
+        if username is not None:
+            self.db.update_name(user_id, username)
+
+        if chat_title is not None:
+            self.db.update_name(chat_id, chat_title)
 
         if command in self.commands:
             if args == []:

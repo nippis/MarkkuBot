@@ -54,9 +54,9 @@ class DatabasePsql:
 
     def update_name(self, id, name):
         sql =   "INSERT INTO {0} (id, name) " \
-                "VALUES ({1}, {2}) " \
+                "VALUES ({1}, '{2}') " \
                 "ON CONFLICT (id) DO UPDATE " \
-                "SET name = {2};"        
+                "SET name = '{2}';"        
 
         self.cursor.execute(sql.format(self.table_name, id, name))
 
@@ -120,6 +120,7 @@ class DatabasePsql:
                 "INNER JOIN {1} " \
                 "ON {0}.user_id = {1}.id " \
                 "WHERE {0}.chat_id={3} " \
+                "AND {0}.{2}!=0 " \
                 "ORDER BY {0}.{2} DESC " \
                 "LIMIT {4};"
 
