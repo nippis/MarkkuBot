@@ -17,25 +17,39 @@ class CommandRouter():
     def __init__(self, db):
         self.db = db
 
-    def route_command(self, bot, update, command):
-        update.message.reply_text(command)
+        self.commands = {
+            "start":    self.start,
+            "darkroom": self.darkroom,
+            "stats":    self.stats,
+            "help":     self.help,
+            "noutaja":  self.noutaja,
+            "topten":   self.topten,
+            "protip":   self.protip,
+            "kysymys":  self.camera_versus,
+            "topten":   self.topten
+        }
 
+    def route_command(self, bot, update, command, args):
+        printlog(update, command)
+
+        count_and_write(self.db, update, "commands")
+
+
+        if command in self.commands:
+            if args == []:
+                self.commands[command](bot, update)
+            else:
+                self.commands[command](bot, update, args)
 
 
     def start(self, bot, update):
-        printlog(update, "start")
-
         _, chat_id = get_ids(update) # Ignoraa user_id, tätä käytetään paljon
-        count_and_write(self.db, update, "commands")
 
         bot.send_message(chat_id=chat_id, text="Woof woof")
 
+
     def stats(self, bot, update):
-        printlog(update, "stats")
-
         user_id, chat_id = get_ids(update)
-
-        count_and_write(self.db, update, "commands")
 
         if self.db.in_blacklist(user_id):
             update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
@@ -76,10 +90,7 @@ class CommandRouter():
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
     def darkroom(self, bot, update):
-        printlog(update, "darkroom")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
         
         try:
             with urlopen("https://ttkamerat.fi/darkroom/api/v1/sensors/latest") as url:
@@ -108,10 +119,7 @@ class CommandRouter():
             bot.send_message(chat_id=chat_id, text="Ei ny onnistunu (%s)" % e.reason)
 
     def help(self, bot, update):
-        printlog(update, "help")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         reply = "Komennot:\n" \
                 "/darkroom - Kertoo onko joku pimiöllä.\n" \
@@ -129,10 +137,7 @@ class CommandRouter():
         bot.send_message(chat_id=chat_id, text=reply, parse_mode='HTML')            
 
     def noutaja(self, bot, update):
-        printlog(update, "noutaja")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         url = "https://dog.ceo/api/breed/retriever/golden/images/random"
 
@@ -146,10 +151,7 @@ class CommandRouter():
             bot.sendPhoto(chat_id=chat_id, photo=picture_link)
 
     def topten(self, bot, update, args):
-        printlog(update, "topten")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         # argumenttejä pitää olla vain yksi. ei errorviestiä koska tätä varmaan painetaan vahingossa usein
         if len(args) != 1:
@@ -171,10 +173,7 @@ class CommandRouter():
         bot.send_message(chat_id=chat_id, text=text)
 
     def protip(self, bot, update):
-        printlog(update, "protip")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         protip_list = masterlist.tips
 
@@ -183,17 +182,12 @@ class CommandRouter():
         bot.send_message(chat_id=chat_id, text=protip_list[protip_index])
 
     def camera_versus(self, bot, update):
-        printlog(update, "camera versus")
-
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         msg = camera_versus_text()
         bot.send_message(chat_id=chat_id, text=msg)
 
     def add_blacklist(self, bot, update):
-        printlog(update, "blacklist")
-
         user_id, _ = get_ids(update)
 
         if (update.message.chat.type != "private"):
