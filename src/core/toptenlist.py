@@ -1,26 +1,21 @@
 def toptenlist(db, chat_id, var):
-    topten_unsorted = db.get_counter_top(chat_id, var, 10)
-
-    counter = {}
-
-    for i in topten_unsorted:
-        if i["count"] != 0:
-            counter[i["username"]] = i["count"]
+    toptenlist_sorted = db.get_counter_top(chat_id, var, 10)
 
     text = ""
     lista = ""
     number = 1
 
-    if len(counter) == 0:
-        text = "'{}'-laskuri on kaikilla tyhjä.".format(var)
+    # Dicti järjestyksessä joten jos eka on 0 --> kaikki on 0.
 
-    else:
-        sorted_usernames = sorted(counter, key=counter.__getitem__, reverse=True)
 
-        for user in sorted_usernames:
-            lista += str(number) + ". " + user + ": " + str(counter[user]) + "\n"
-            number += 1
+    for user, value in toptenlist_sorted.items():
 
-            text = "Top {} laskurissa {}:\n{}".format(len(counter), var, lista)
+        if number == 1 and value == 0:
+            return "'{}'-laskuri on kaikilla tyhjä.".format(var)
+
+        lista += str(number) + ". " + user + ": " + str(value) + "\n"
+        number += 1
+
+    text = "Top {} laskurissa {}:\n{}".format(len(toptenlist_sorted), var, lista)
 
     return text
