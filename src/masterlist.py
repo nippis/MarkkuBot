@@ -18,7 +18,8 @@ cameras = {
         "Fujifilm",
         "iPhone",
         "Phase One",
-        "Sinar"
+        "Sinar",
+        "Smena"
     ]
 }
 
@@ -56,7 +57,15 @@ tips = [
     "Vaimoni on Sääksmäeltä.\n -markku",
     "Muuta Sastamalaan",
     "Älä osta presettejä!",
-    "Sammuta kamera kun irroitat vakaajallista putkea"
+    "Sammuta kamera kun irroitat vakaajallista putkea",
+    "Jos filmillä epäonnistuu, niin voi kattoo vaan peiliin ja nähdä mistä se epäonnistuminen johtuu",
+    "Manuaalilla ku tarkentaa niin aina osuu",
+    "Kyllä sillä roskalavalta noukitulla keksipurkillakin saa kunnon kuvaa osaavissa käsissä",
+    "Joistakin malleista ei millään saa elävän tuntuisia kuvia. Tällöin yksi cocktail auttaa hyvän tuloksen saamiseksi paremmin kuin yhden voimakkaan lampun antama lisävalo.",
+    "Mitä vaikeempi asento sen taiteellisempi kuva!",
+    "Gammasäteily ei häikäise",
+    "Paras kamera ei ole kaikille sama",
+    "Osta sääkin oma Smenas, ne ei paljon maksa"
 ]
 
 stickers = [
