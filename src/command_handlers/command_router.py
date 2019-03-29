@@ -3,6 +3,7 @@ import json
 from urllib.request import urlopen, Request
 from urllib.error import URLError
 import random
+from os import environ
 
 from core.printlog import printlog
 from core.count_and_write import count_and_write
@@ -73,7 +74,7 @@ class CommandRouter():
         count_and_write(self.db, update, "commands")
         
         try:
-            with urlopen("https://ttkamerat.fi/darkroom/api/v1/sensors/latest") as url:
+            with urlopen(environ["SENSOR_API_ADDRESS"]) as url:
                 sensor_data = json.loads(url.read().decode())
 
                 value_light = 0
