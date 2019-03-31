@@ -28,6 +28,7 @@ DB_NAME=<tietokannan nimi>
 CHATS_COLL_NAME=<tietokannan chat-collectionin nimi>
 WORDS_COLL_NAME=<tietokannan sana-collectionin nimi>
 BLACKLIST_COLL_NAME=<tietokannan blacklist-collectionin nimi>
+SENSOR_API_ADDRESS=<pimiödatan api:n osoite>
 ```
 
 ## Huomattavaa
