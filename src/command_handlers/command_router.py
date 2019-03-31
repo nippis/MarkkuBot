@@ -4,6 +4,7 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 import random
 from os import environ
+import time
 
 from core.printlog import printlog
 from core.count_and_write import count_and_write
@@ -17,6 +18,16 @@ import masterlist
 class CommandRouter():
     def __init__(self, db):
         self.db = db
+        self.last_command = {}
+
+    def on_timeout(self, user_id, chat_id):
+        current_time = time.time()
+
+        if (user_id, chat_id) in self.last_command and self.last_command[(user_id, chat_id)] + 60 > current_time:
+            return True
+        else:
+            self.last_command[(user_id, chat_id)] = current_time
+            return False
 
     def start(self, bot, update):
         printlog(update, "start")
@@ -32,6 +43,9 @@ class CommandRouter():
         user_id, chat_id = get_ids(update)
 
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
 
         if self.db.in_blacklist(user_id):
             update.message.reply_text("Markku ei seuraa sinua. Käytä komentoa /unblacklist , jos haluat seurannan käyttöön.\n" \
@@ -70,8 +84,11 @@ class CommandRouter():
     def darkroom(self, bot, update):
         printlog(update, "darkroom")
 
-        _, chat_id = get_ids(update)
+        user_id, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
         
         try:
             with urlopen(environ["SENSOR_API_ADDRESS"]) as url:
@@ -102,8 +119,11 @@ class CommandRouter():
     def help(self, bot, update):
         printlog(update, "help")
 
-        _, chat_id = get_ids(update)
+        user_id, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
 
         reply = "Komennot:\n" \
                 "/darkroom - Kertoo onko joku pimiöllä.\n" \
@@ -123,8 +143,11 @@ class CommandRouter():
     def noutaja(self, bot, update):
         printlog(update, "noutaja")
 
-        _, chat_id = get_ids(update)
+        user_id, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
 
         url = "https://dog.ceo/api/breed/retriever/golden/images/random"
 
@@ -142,6 +165,9 @@ class CommandRouter():
 
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
 
         # argumenttejä pitää olla vain yksi. ei errorviestiä koska tätä varmaan painetaan vahingossa usein
         if len(args) != 1:
@@ -165,8 +191,11 @@ class CommandRouter():
     def protip(self, bot, update):
         printlog(update, "protip")
 
-        _, chat_id = get_ids(update)
+        user_id, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
+
+        if self.on_timeout(user_id, chat_id):
+            return
 
         protip_list = masterlist.tips
 
