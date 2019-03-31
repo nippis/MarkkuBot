@@ -1,7 +1,7 @@
 version: "3"
 services:
   markkubot:
-    build: .
+    image: markkubot:latest
     env_file: .env
     depends_on:
     - mongo
