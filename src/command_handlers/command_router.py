@@ -163,7 +163,7 @@ class CommandRouter():
     def topten(self, bot, update, args):
         printlog(update, "topten")
 
-        _, chat_id = get_ids(update)
+        user_id, chat_id = get_ids(update)
         count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
