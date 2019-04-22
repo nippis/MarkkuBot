@@ -65,7 +65,8 @@ tips = [
     "Mitä vaikeempi asento sen taiteellisempi kuva!",
     "Gammasäteily ei häikäise",
     "Paras kamera ei ole kaikille sama",
-    "Osta sääkin oma Smenas, ne ei paljon maksa"
+    "Osta sääkin oma Smenas, ne ei paljon maksa",
+    "Tarkista kaikkien kameroiden kellot ennen ku alat vetää"
 ]
 
 stickers = [
