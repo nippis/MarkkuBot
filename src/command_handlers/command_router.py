@@ -72,7 +72,7 @@ class CommandRouter():
                 msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
 
             else:
-                msg += "\n{:<10}{:>4} ({:>5}%)".format(counter.capitalize() + ":",
+                msg += "\n{:<10}{:>5} ({:>4}%)".format(counter.capitalize() + ":",
                     user_counters[counter], round(user_counters[counter] / counter_sum * 100, 1) )
 
         msg += "</code>"
