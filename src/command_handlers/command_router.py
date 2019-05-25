@@ -65,7 +65,7 @@ class CommandRouter():
 
         # Muodostetaan lähetettävä viesti
         msg = "@{}<code>:".format(update.message.from_user.username)
-        msg += "\n{:<10}{:>4}".format("Total:", counter_sum)
+        msg += "\n{:<10}{:>5}".format("Total:", counter_sum)
 
         for counter in user_counters:
             if counter == "kiitos":
