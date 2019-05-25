@@ -47,7 +47,7 @@ tips = [
     "1.4 voi joskus himmentää",
     "Älä käytä sigmaa oikeissa kuvauksissa",
     "Älä käytä f22, kun kuvaat makroja. Difraktio on vittumainen suure",
-    "Parhaat kuvat sisältää aina vähän syntiä :)",
+    "Parhaat kuvat sisältää aina vähän syntiä ;)",
     "Muistakaa käyttää P(rofessional)-modee",
     "Kovalevytila on halpaa ja pilvipalvelut rajattomia <3",
     "Valovoima on ylivoimaa",
@@ -65,7 +65,8 @@ tips = [
     "Mitä vaikeempi asento sen taiteellisempi kuva!",
     "Gammasäteily ei häikäise",
     "Paras kamera ei ole kaikille sama",
-    "Osta sääkin oma Smenas, ne ei paljon maksa"
+    "Osta sääkin oma Smenas, ne ei paljon maksa",
+    "Tarkista kaikkien kameroiden kellot ennen ku alat vetää"
 ]
 
 stickers = [
