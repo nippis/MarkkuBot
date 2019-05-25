@@ -14,9 +14,13 @@ Kehitys onnistuu helpoiten komennolla `docker-compose up --build` tai `docker-co
 
 *Tähän saadaan toivottavasti automatisointi jatkossa.*
 
+Markun image rakennetaan komennolla `docker build -t markkubot:x.x.x .`, missä x.x.x on uusi versionumero. Tarkista nykyinen komennolla `docker ps`. Tämä numero pitää kirjoittaa myös docker-compose.yml tiedostoon.
+
 Tuotantokoneella Markkua kannattaa ajaa stackina eli komennolla
 `docker stack deploy -c docker-compose.yml --resolve-image never markku`,
 missä `-c` kertoo docker-compose -filun polun, `--resolve-image never` ei tarkista ajettavia imageja Docker Hubista (jos imaget lokaalisti buildattuja) ja viimeinen parametri asettaa stackille nimen, tässä tapauksessa "markku". Stackin päivittäminen tapahtuu samalla komennolla.
+
+Ylläoleva komento on kirjoitettu valmiiksi update.sh tiedostoon. 
 
 ### .env
 
