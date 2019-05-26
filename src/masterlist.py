@@ -18,7 +18,8 @@ cameras = {
         "Fujifilm",
         "iPhone",
         "Phase One",
-        "Sinar"
+        "Sinar",
+        "Smena"
     ]
 }
 
@@ -46,7 +47,7 @@ tips = [
     "1.4 voi joskus himmentää",
     "Älä käytä sigmaa oikeissa kuvauksissa",
     "Älä käytä f22, kun kuvaat makroja. Difraktio on vittumainen suure",
-    "Parhaat kuvat sisältää aina vähän syntiä :)",
+    "Parhaat kuvat sisältää aina vähän syntiä ;)",
     "Muistakaa käyttää P(rofessional)-modee",
     "Kovalevytila on halpaa ja pilvipalvelut rajattomia <3",
     "Valovoima on ylivoimaa",
@@ -56,7 +57,16 @@ tips = [
     "Vaimoni on Sääksmäeltä.\n -markku",
     "Muuta Sastamalaan",
     "Älä osta presettejä!",
-    "Sammuta kamera kun irroitat vakaajallista putkea"
+    "Sammuta kamera kun irroitat vakaajallista putkea",
+    "Jos filmillä epäonnistuu, niin voi kattoo vaan peiliin ja nähdä mistä se epäonnistuminen johtuu",
+    "Manuaalilla ku tarkentaa niin aina osuu",
+    "Kyllä sillä roskalavalta noukitulla keksipurkillakin saa kunnon kuvaa osaavissa käsissä",
+    "Joistakin malleista ei millään saa elävän tuntuisia kuvia. Tällöin yksi cocktail auttaa hyvän tuloksen saamiseksi paremmin kuin yhden voimakkaan lampun antama lisävalo.",
+    "Mitä vaikeempi asento sen taiteellisempi kuva!",
+    "Gammasäteily ei häikäise",
+    "Paras kamera ei ole kaikille sama",
+    "Osta sääkin oma Smenas, ne ei paljon maksa",
+    "Tarkista kaikkien kameroiden kellot ennen ku alat vetää"
 ]
 
 stickers = [

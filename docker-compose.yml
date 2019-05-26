@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   markkubot:
-    build: .
+    image: markkubot:2.0.7
     env_file: .env
     depends_on:
     - db
