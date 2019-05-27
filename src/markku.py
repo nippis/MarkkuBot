@@ -12,8 +12,7 @@ from message_handlers.message_router import MessageRouter
     
 def handlers(updater):
     dp = updater.dispatcher
-
-    # TODO backendin valinta conffin kautta
+    
     # Avataan tietokanta
     db = DatabasePsql()
 
@@ -21,21 +20,9 @@ def handlers(updater):
     cr = CommandRouter(db)
     mr = MessageRouter(db)
 
+    # Komennot
     dp.add_handler(CommandHandler(cr.get_commands(), cr.route_command, pass_args=True))
 
-    # Komentojen kautta toimivat
-    # dp.add_handler(CommandHandler('start', cr.start))
-    # dp.add_handler(CommandHandler('darkroom', cr.darkroom))
-    # dp.add_handler(CommandHandler('stats', cr.stats))
-    # dp.add_handler(CommandHandler('help', cr.help))
-    # dp.add_handler(CommandHandler('noutaja', cr.noutaja))
-    # dp.add_handler(CommandHandler('topten', cr.topten, pass_args=True))
-    # dp.add_handler(CommandHandler('protip', cr.protip))
-    # dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
-
-    # Blacklist
-    # dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
-    # dp.add_handler(CommandHandler('unblacklist', cr.remove_blacklist))
     dp.add_handler(CallbackQueryHandler(cr.blacklist_confirm))
 
     # Suoraa viestiä urkkivat kilkkeet
