@@ -8,32 +8,39 @@ Markun toteutus on siirretty Dockerissa pyöriväksi. Vaikka Markkua pystyy edel
 
 ### Kehitys
 
-Kehitys onnistuu helpoiten komennolla `docker-compose up --build` tai `docker-compose up --build -d` jos haluat ajaa detached-tilassa. 
+Kehitys onnistuu helpoiten samalla tavalla kuin tuotannossa eli *build_and_update.sh* tiedostolla joka tekee docker networking tjsp.
 
 ### Tuotanto
 
 *Tähän saadaan toivottavasti automatisointi jatkossa.*
 
-Markun image rakennetaan komennolla `docker build -t markkubot:x.x.x .`, missä x.x.x on uusi versionumero. Tarkista nykyinen komennolla `docker ps`. Tämä numero pitää kirjoittaa myös docker-compose.yml tiedostoon.
+Markun image rakennetaan komennolla `docker build -t markkubot:latest .`.
 
-Tuotantokoneella Markkua kannattaa ajaa stackina eli komennolla
-`docker stack deploy -c docker-compose.yml --resolve-image never markku`,
-missä `-c` kertoo docker-compose -filun polun, `--resolve-image never` ei tarkista ajettavia imageja Docker Hubista (jos imaget lokaalisti buildattuja) ja viimeinen parametri asettaa stackille nimen, tässä tapauksessa "markku". Stackin päivittäminen tapahtuu samalla komennolla.
+Tuotantokoneella Markkua ajetaan docker-composella komennolla `docker-compose up -d`.
 
-Ylläoleva komento on kirjoitettu valmiiksi update.sh tiedostoon. 
+Ylläolevat komennot ovat kirjoitettu valmiiksi *build_and_update.sh* tiedostossa.
 
 ### .env
 
-env-tiedostossa Markulle tärkeät jutut (keksi sopivat nimet itse, esim. `markku_chats_collection` jne.):
+env-tiedostossa Markulle tärkeät jutut:
 
 ```
-TG_TOKEN=<telegramin bot token>
-DB_NAME=<tietokannan nimi>
-CHATS_COLL_NAME=<tietokannan chat-collectionin nimi>
-WORDS_COLL_NAME=<tietokannan sana-collectionin nimi>
-BLACKLIST_COLL_NAME=<tietokannan blacklist-collectionin nimi>
-SENSOR_API_ADDRESS=<pimiödatan api:n osoite>
+TG_TOKEN=
+
+SENSOR_API_ADDRESS=
+
+PSQL_USER=
+PSQL_PASS=
+PSQL_DBNAME=
+PSQL_HOST=
+PSQL_PORT=
+PSQL_TABLE_NAME=
+PSQL_TABLE_COUNTER=
+PSQL_TABLE_WORD=
+PSQL_TABLE_BLACKLIST=
 ```
+
+Docker-composella ajettaessa host pitää olla 'tietokantaolion' nimi, tässä tapauksessa db.
 
 ## Huomattavaa
 
@@ -43,7 +50,6 @@ HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git
 
 ## ROADMAP
 
-* PostgreSQL
 * Githubista automatisoidut Docker-buildit: https://docs.docker.com/docker-hub/github/#github-organizations
 * Tuotantoon joku haistelija, joka hakee uusimman buildin Docker Hubista ja käynnistää Markun uudelleen
 
