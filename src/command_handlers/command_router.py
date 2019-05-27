@@ -20,6 +20,25 @@ class CommandRouter():
         self.db = db
         self.last_command = {}
 
+        self.commands = {
+            "/start": self.start,
+            "/stats": self.stats,
+            "/darkroom": self.darkroom,
+            "/help": self.help,
+            "/noutaja": self.noutaja,
+            "/topten": self.topten,
+            "/protip": self.protip,
+            "/blacklist": self.add_blacklist,
+            "/unblacklist": self.remove_blacklist
+        }
+
+    def route_command(self, bot, update, args=[]):
+        message = update.message.text
+
+        if message in self.commands:
+            self.commands[message](bot, update, args)
+
+
     def on_timeout(self, user_id, chat_id):
         current_time = time.time()
 
@@ -29,45 +48,16 @@ class CommandRouter():
             self.last_command[(user_id, chat_id)] = current_time
             return False
 
-        self.commands = {
-            "start":    self.start,
-            "darkroom": self.darkroom,
-            "stats":    self.stats,
-            "help":     self.help,
-            "noutaja":  self.noutaja,
-            "protip":   self.protip,
-            "kysymys":  self.camera_versus,
-            "topten":   self.topten
-        }
-
-    def route_command(self, bot, update, command, args):
-        printlog(update, command)
-        count_and_write(self.db, update, "commands")
-
-        username = update.message.from_user.username
-        chat_title = update.message.chat.title
-        user_id, chat_id = get_ids(update)
-
-        if username is not None:
-            self.db.update_name(user_id, username)
-
-        if chat_title is not None:
-            self.db.update_name(chat_id, chat_title)
-
-        if command in self.commands:
-            if args == []:
-                self.commands[command](bot, update)
-            else:
-                self.commands[command](bot, update, args)
-
-
-    def start(self, bot, update):
+    def start(self, bot, update, args):
+        printlog(update, "start")
+        
         _, chat_id = get_ids(update) # Ignoraa user_id, tätä käytetään paljon
 
         bot.send_message(chat_id=chat_id, text="Woof woof")
 
+    def stats(self, bot, update, args):
+        printlog(update, "stats")
 
-    def stats(self, bot, update):
         user_id, chat_id = get_ids(update)
 
         count_and_write(self.db, update, "commands")
@@ -113,7 +103,7 @@ class CommandRouter():
         bot.send_message(chat_id=chat_id, text=msg, parse_mode='HTML')
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
-    def darkroom(self, bot, update):
+    def darkroom(self, bot, update, args):
         printlog(update, "darkroom")
 
         user_id, chat_id = get_ids(update)
@@ -148,7 +138,7 @@ class CommandRouter():
             print(e.reason)
             bot.send_message(chat_id=chat_id, text="Ei ny onnistunu (%s)" % e.reason)
 
-    def help(self, bot, update):
+    def help(self, bot, update, args):
         printlog(update, "help")
 
         user_id, chat_id = get_ids(update)
@@ -172,7 +162,7 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=reply, parse_mode='HTML')            
 
-    def noutaja(self, bot, update):
+    def noutaja(self, bot, update, args):
         printlog(update, "noutaja")
 
         user_id, chat_id = get_ids(update)
@@ -220,7 +210,7 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=text)
 
-    def protip(self, bot, update):
+    def protip(self, bot, update, args):
         printlog(update, "protip")
 
         user_id, chat_id = get_ids(update)
@@ -235,13 +225,17 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=protip_list[protip_index])
 
-    def camera_versus(self, bot, update):
+    def camera_versus(self, bot, update, args):
+        printlog(update, "camera versus")
+
         _, chat_id = get_ids(update)
 
         msg = camera_versus_text()
         bot.send_message(chat_id=chat_id, text=msg)
 
-    def add_blacklist(self, bot, update):
+    def add_blacklist(self, bot, update, args):
+        printlog(update, "blacklist")
+
         user_id, _ = get_ids(update)
 
         if (update.message.chat.type != "private"):
@@ -266,7 +260,7 @@ class CommandRouter():
                                 "and add your user to the \"do not track\" list?",
                                 reply_markup=reply_markup)
 
-    def remove_blacklist(self, bot, update):
+    def remove_blacklist(self, bot, update, args):
         user_id, _ = get_ids(update)
 
         if (update.message.chat.type != "private"):

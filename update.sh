@@ -1,1 +1,1 @@
-docker stack deploy -c docker-compose.yml --resolve-image never markku
+docker stack deploy -c docker-compose.yml --resolve-image never markkupsql
