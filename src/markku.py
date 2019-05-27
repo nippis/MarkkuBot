@@ -21,7 +21,7 @@ def handlers(updater):
     cr = CommandRouter(db)
     mr = MessageRouter(db)
 
-    dp.add_handler(CommandHandler(Filters.all, cr.route_command, pass_args=True))
+    dp.add_handler(CommandHandler(cr.get_commands(), cr.route_command, pass_args=True))
 
     # Komentojen kautta toimivat
     # dp.add_handler(CommandHandler('start', cr.start))

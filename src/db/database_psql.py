@@ -38,8 +38,6 @@ class DatabasePsql:
             "commands",
         ]
 
-        print(self.conn.closed)
-
     def get_counters(self):
         return self.counters
 

@@ -32,6 +32,13 @@ class CommandRouter():
             "/unblacklist": self.remove_blacklist
         }
 
+    def get_commands(self):
+        # yllä olevat komennot
+        coms = self.commands.keys()
+
+        # poistetaan '/' edestä 
+        return [x[1:] for x in coms]
+
     def route_command(self, bot, update, args=[]):
         message = update.message.text
 
@@ -42,6 +49,10 @@ class CommandRouter():
     def on_timeout(self, user_id, chat_id):
         current_time = time.time()
 
+        # privassa saa spämmii
+        if user_id == chat_id:
+            return False
+
         if (user_id, chat_id) in self.last_command and self.last_command[(user_id, chat_id)] + 60 > current_time:
             return True
         else:
@@ -50,7 +61,7 @@ class CommandRouter():
 
     def start(self, bot, update, args):
         printlog(update, "start")
-        
+
         _, chat_id = get_ids(update) # Ignoraa user_id, tätä käytetään paljon
 
         bot.send_message(chat_id=chat_id, text="Woof woof")
