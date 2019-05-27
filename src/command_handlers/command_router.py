@@ -40,7 +40,7 @@ class CommandRouter():
         return [x[1:] for x in coms]
 
     def route_command(self, bot, update, args=[]):
-        message = update.message.text
+        message = update.message.text.split(" ")[0]
 
         if message in self.commands:
             self.commands[message](bot, update, args)
