@@ -21,19 +21,21 @@ def handlers(updater):
     cr = CommandRouter(db)
     mr = MessageRouter(db)
 
+    dp.add_handler(CommandHandler(Filters.all, cr.route_command, pass_args=True))
+
     # Komentojen kautta toimivat
-    dp.add_handler(CommandHandler('start',          add_param(cr.route_command, "start")))
-    dp.add_handler(CommandHandler('darkroom',       add_param(cr.route_command, "darkroom")))
-    dp.add_handler(CommandHandler('stats',          add_param(cr.route_command, "stats")))
-    dp.add_handler(CommandHandler('help',           add_param(cr.route_command, "help")))
-    dp.add_handler(CommandHandler('noutaja',        add_param(cr.route_command, "noutaja")))
-    dp.add_handler(CommandHandler('protip',         add_param(cr.route_command, "protip")))
-    dp.add_handler(CommandHandler('kysymys',        add_param(cr.route_command, "kysymys")))
-    dp.add_handler(CommandHandler('topten',         add_param(cr.route_command, "topten"), pass_args=True))
+    # dp.add_handler(CommandHandler('start', cr.start))
+    # dp.add_handler(CommandHandler('darkroom', cr.darkroom))
+    # dp.add_handler(CommandHandler('stats', cr.stats))
+    # dp.add_handler(CommandHandler('help', cr.help))
+    # dp.add_handler(CommandHandler('noutaja', cr.noutaja))
+    # dp.add_handler(CommandHandler('topten', cr.topten, pass_args=True))
+    # dp.add_handler(CommandHandler('protip', cr.protip))
+    # dp.add_handler(CommandHandler('kysymys', cr.camera_versus))
 
     # Blacklist
-    dp.add_handler(CommandHandler('blacklist',      add_param(cr.add_blacklist, "blacklist")))
-    dp.add_handler(CommandHandler('unblacklist',    add_param(cr.remove_blacklist, "unblacklist")))
+    # dp.add_handler(CommandHandler('blacklist', cr.add_blacklist))
+    # dp.add_handler(CommandHandler('unblacklist', cr.remove_blacklist))
     dp.add_handler(CallbackQueryHandler(cr.blacklist_confirm))
 
     # Suoraa viestiä urkkivat kilkkeet

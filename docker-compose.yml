@@ -1,7 +1,7 @@
-version: "3.3"
+version: "3.7"
 services:
   markkubot:
-    image: markkubot:2.0.7
+    image: markkubot:latest
     env_file: .env
     depends_on:
     - db
@@ -12,8 +12,6 @@ services:
       POSTGRES_USER: eltsu7
       POSTGRES_PASSWORD: kaljaa
       POSTGRES_DB: markku
-    ports:
-    - "5432:5432"
     volumes:
     - data-volume:/data/db
 volumes:
