@@ -83,7 +83,7 @@ tips = [
     "Skannaa mieluusti negat muualla ko keittiössä, staattinen sähkö vetään puoleensa leivänmuruja",
     "Smena on täydellinen",
     "Kameroita ei voi olla ikinä liikaa",
-    "3D-mallinnus on kuvankäsittelytyökalu"
+    "3D-mallinnus on kuvankäsittelytyökalu",
     "Passikuvan voi ottaa vaikka puhelimella kotona 😅 siin ei oo kovat vaatimukset",
     "Julkaiskaa enemmän, saa palautetta ja myöhemmin saa myötistellä eiku siis näkee kuinka on kehittyny kuvaajana"
 ]
