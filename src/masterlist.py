@@ -19,7 +19,9 @@ cameras = {
         "iPhone",
         "Phase One",
         "Sinar",
-        "Smena"
+        "Smena",
+        "P30 Pro",
+        "Keksipurkki"
     ]
 }
 
@@ -29,6 +31,7 @@ tips = [
     "Vaihda canoniin",
     "Vaihda nikoniin",
     "Vaihda sonyyn",
+    "Vaihda smenaan",
     "Rembrandtit kuntoon",
     "Hommaa savukone",
     "Horisontti suoraan",
@@ -66,7 +69,23 @@ tips = [
     "Gammasäteily ei häikäise",
     "Paras kamera ei ole kaikille sama",
     "Osta sääkin oma Smenas, ne ei paljon maksa",
-    "Tarkista kaikkien kameroiden kellot ennen ku alat vetää"
+    "Tarkista kaikkien kameroiden kellot ennen ku alat vetää",
+    "Kuivaa jalusta huolella jos uitat sen kokonaan järvessä",
+    "Treenaa pohkeita",
+    "Miten vauvan saa niin vakavaks, että rembrant toimii? \n-Laitat pehmolelut silppuriin",
+    "Mene mukaan tilanteisiin hienovaraisesti",
+    "Smenalla: Aukko f/11 tai 16, tarkennus mieluummin ylä- kun alakanttiin",
+    "Isolla aukolla vain jos on pakko",
+    "Ainoo mitä tiedän synnytyksestä on että ilokaasunaamari tippuu helposti pöhnässä naamalta. Kannattaa nojata naamalla seinään silleen että ilokaasunaamari pysyy suulla.",
+    "Mustavalkokuvassa ei näy huulipuna",
+    "Jos kuvasi tulee päätymään Aamulehteen (Moro) niin varmista, että kuvaat vaakakuvia",
+    "Servo päälle ja nappi pohjaan ja kotona sitten katotaan kuvat",
+    "Skannaa mieluusti negat muualla ko keittiössä, staattinen sähkö vetään puoleensa leivänmuruja",
+    "Smena on täydellinen",
+    "Kameroita ei voi olla ikinä liikaa",
+    "3D-mallinnus on kuvankäsittelytyökalu"
+    "Passikuvan voi ottaa vaikka puhelimella kotona 😅 siin ei oo kovat vaatimukset",
+    "Julkaiskaa enemmän, saa palautetta ja myöhemmin saa myötistellä eiku siis näkee kuinka on kehittyny kuvaajana"
 ]
 
 stickers = [
