@@ -8,10 +8,8 @@ services:
     restart: always
   db:
     image: postgres
-    environment:
-      POSTGRES_USER: eltsu7
-      POSTGRES_PASSWORD: kaljaa
-      POSTGRES_DB: markku
+    env_file:
+      - .env
     volumes:
     - data-volume:/data/db
 volumes:

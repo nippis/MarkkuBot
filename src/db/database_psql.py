@@ -5,15 +5,15 @@ import psycopg2
 
 class DatabasePsql:
     def __init__(self):
-        db_name = environ["PSQL_DBNAME"]
-        db_user = environ["PSQL_USER"]
-        db_pass = environ["PSQL_PASS"]
-        db_host = environ["PSQL_HOST"]
-        db_port = environ["PSQL_PORT"]
-        self.table_name =       environ["PSQL_TABLE_NAME"]
-        self.table_counter =    environ["PSQL_TABLE_COUNTER"]
-        self.table_word =       environ["PSQL_TABLE_WORD"]
-        self.table_blacklist =  environ["PSQL_TABLE_BLACKLIST"]
+        db_name = environ["POSTGRES_DB"]
+        db_user = environ["POSTGRES_USER"]
+        db_pass = environ["POSTGRES_PASSWORD"]
+        db_host = environ["POSTGRES_HOST"]
+        db_port = environ["POSTGRES_PORT"]
+        self.table_name =       environ["POSTGRES_TABLE_NAME"]
+        self.table_counter =    environ["POSTGRES_TABLE_COUNTER"]
+        self.table_word =       environ["POSTGRES_TABLE_WORD"]
+        self.table_blacklist =  environ["POSTGRES_TABLE_BLACKLIST"]
 
         self.conn = psycopg2.connect(
             dbname=db_name,
