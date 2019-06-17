@@ -76,7 +76,6 @@ tips = [
     "Mene mukaan tilanteisiin hienovaraisesti",
     "Smenalla: Aukko f/11 tai 16, tarkennus mieluummin ylä- kun alakanttiin",
     "Isolla aukolla vain jos on pakko",
-    "Ainoo mitä tiedän synnytyksestä on että ilokaasunaamari tippuu helposti pöhnässä naamalta. Kannattaa nojata naamalla seinään silleen että ilokaasunaamari pysyy suulla.",
     "Mustavalkokuvassa ei näy huulipuna",
     "Jos kuvasi tulee päätymään Aamulehteen (Moro) niin varmista, että kuvaat vaakakuvia",
     "Servo päälle ja nappi pohjaan ja kotona sitten katotaan kuvat",
