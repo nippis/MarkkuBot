@@ -57,7 +57,6 @@ tips = [
     "Laskeudu koiran tasolle",
     "Pidä kädessäsi lelua tai ruokaa ja heiluttele sitä linssin ympärillä",
     "Kärsivällisyyttä",
-    "Vaimoni on Sääksmäeltä.\n -markku",
     "Muuta Sastamalaan",
     "Älä osta presettejä!",
     "Sammuta kamera kun irroitat vakaajallista putkea",
