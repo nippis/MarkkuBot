@@ -88,7 +88,7 @@ class DatabasePsql:
 
 
     def increment_counter(self, user_id, chat_id, counter, amount):
-        # inkrementoidaan, jossei riviä ole, lisätään se
+        # inkrementoidaan, jos riviä ei ole, lisätään se
 
         sql =   "INSERT INTO {0} (user_id, chat_id, {1}) " \
                 "VALUES ({2}, {3}, {4}) " \
@@ -100,7 +100,7 @@ class DatabasePsql:
 
 
     def get_counter_user(self, user_id, chat_id, counter):
-        # palauttaa käyttäjä, chätti parin laskurin
+        # palauttaa (käyttäjä, chätti)-parin laskurin
 
         sql =   "SELECT {} " \
                 "FROM {} " \
@@ -132,7 +132,7 @@ class DatabasePsql:
 
         
     def word_collection_add(self, user_id, chat_id, word, amount):
-        # user, chat, sana yhdistelmät uniikkeja
+        # user, chat, sanayhdistelmät uniikkeja
         # jos ei löydy -> lisätään, jos löytyy, lisätään amount counttiin
 
         sql =   "INSERT INTO {0} (user_id, chat_id, word, count) " \
