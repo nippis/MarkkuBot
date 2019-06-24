@@ -22,25 +22,9 @@ Ylläolevat komennot ovat kirjoitettu valmiiksi *build_and_update.sh* tiedostoss
 
 ### .env
 
-env-tiedostossa Markulle tärkeät jutut:
+Kopsaa `.env.sample` ja nimeä uudelleen `.env`:iksi. Kirjoittele sinne fiksuja arvoja.
 
-```
-TG_TOKEN=
-
-SENSOR_API_ADDRESS=
-
-PSQL_USER=
-PSQL_PASS=
-PSQL_DBNAME=
-PSQL_HOST=
-PSQL_PORT=
-PSQL_TABLE_NAME=
-PSQL_TABLE_COUNTER=
-PSQL_TABLE_WORD=
-PSQL_TABLE_BLACKLIST=
-```
-
-Docker-composella ajettaessa host pitää olla 'tietokantaolion' nimi, tässä tapauksessa db.
+`POSTGRES_DB` on Postgresiin luotavan tietokannan nimi.
 
 ## Huomattavaa
 
