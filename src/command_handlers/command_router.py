@@ -101,7 +101,7 @@ class CommandRouter():
                 # JSON härössä muodossa, sen takia teemme näin. Esimerkki:
                 #   {"entries": [{"value": 191, "sensor": "light1", "inserted": "2018-07-27T16:18:43.589Z"}]}
 
-                if len(sensor_data) != 0:
+                if len(sensor_data["entries"]) != 0:
                     for sensor in sensor_data["entries"]:
                         if sensor["sensor"] == "light1":
                             value_light = sensor["value"]
