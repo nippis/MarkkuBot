@@ -5,6 +5,7 @@ from urllib.error import URLError
 import random
 from os import environ
 import time
+from datetime import datetime
 
 from core.printlog import printlog
 from core.count_and_write import count_and_write
@@ -95,21 +96,41 @@ class CommandRouter():
                 sensor_data = json.loads(url.read().decode())
 
                 value_light = 0
-                isDarkroomPopulated = False
+                insert_time = ""
 
                 # JSON härössä muodossa, sen takia teemme näin. Esimerkki:
                 #   {"entries": [{"value": 191, "sensor": "light1", "inserted": "2018-07-27T16:18:43.589Z"}]}
-                for sensor in sensor_data["entries"]:
-                    if sensor["sensor"] == "light1":
-                        value_light = sensor["value"]
 
-                if value_light > 100:
-                    isDarkroomPopulated = True
+                if len(sensor_data["entries"]) != 0:
+                    for sensor in sensor_data["entries"]:
+                        if sensor["sensor"] == "light1":
+                            value_light = sensor["value"]
+                            insert_time = sensor["inserted"]
 
-                if isDarkroomPopulated:
-                    reply = "Joku on pimiöllä :O\n"
+                    if value_light > 100:
+                        reply = "Joku on pimiöllä :O"
+                    else:
+                        reply = "Pimiö tyhjä :("
+
+                    # Selvitetään kuinka vanhaa uusin tieto on. Palvelimen data UTC:na, verrataan lokaaliin aikaan.
+                    # Tällä toteutuksella lokaalin aikavyöhykkeen ei pitäisi haitata.
+                    current_datetime = datetime.now()
+                    now_timestamp = time.time()
+
+                    offset = datetime.fromtimestamp(now_timestamp) - datetime.utcfromtimestamp(now_timestamp)
+
+                    inserted_datetime = datetime.strptime(insert_time, "%Y-%m-%dT%H:%M:%S.%fZ") + offset
+
+                    date_diff = current_datetime - inserted_datetime
+
+                    if date_diff.seconds > 3600:
+                        if date_diff.days == 0:
+                            reply += " ({} tuntia sitten)".format(date_diff.seconds//3600)
+                        else:
+                            reply += " ({} päivää ja {} tuntia sitten)".format(date_diff.days, date_diff.seconds//3600)
+
                 else:
-                    reply = "Pimiö tyhjä :(\n"
+                    reply = "Ei tietoa :/"
 
                 bot.send_message(chat_id=chat_id, text=reply)
         except URLError as e:
