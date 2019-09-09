@@ -95,21 +95,21 @@ class CommandRouter():
                 sensor_data = json.loads(url.read().decode())
 
                 value_light = 0
-                isDarkroomPopulated = False
 
                 # JSON härössä muodossa, sen takia teemme näin. Esimerkki:
                 #   {"entries": [{"value": 191, "sensor": "light1", "inserted": "2018-07-27T16:18:43.589Z"}]}
-                for sensor in sensor_data["entries"]:
-                    if sensor["sensor"] == "light1":
-                        value_light = sensor["value"]
 
-                if value_light > 100:
-                    isDarkroomPopulated = True
+                if len(sensor_data) != 0:
+                    for sensor in sensor_data["entries"]:
+                        if sensor["sensor"] == "light1":
+                            value_light = sensor["value"]
 
-                if isDarkroomPopulated:
-                    reply = "Joku on pimiöllä :O\n"
+                    if value_light > 100:
+                        reply = "Joku on pimiöllä :O\n"
+                    else:
+                        reply = "Pimiö tyhjä :(\n"
                 else:
-                    reply = "Pimiö tyhjä :(\n"
+                    reply = "Ei tietoa :/\n"
 
                 bot.send_message(chat_id=chat_id, text=reply)
         except URLError as e:
