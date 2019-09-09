@@ -123,10 +123,11 @@ class CommandRouter():
 
                     date_diff = current_datetime - inserted_datetime
 
-                    if date_diff.days != 0:
-                        reply += " ({} tuntia sitten)".format(date_diff.seconds//3600)
-                    else:
-                        reply += " ({} päivää ja {} tuntia sitten)".format(date_diff.days, date_diff.seconds//3600)
+                    if date_diff.seconds > 3600:
+                        if date_diff.days == 0:
+                            reply += " ({} tuntia sitten)".format(date_diff.seconds//3600)
+                        else:
+                            reply += " ({} päivää ja {} tuntia sitten)".format(date_diff.days, date_diff.seconds//3600)
 
                 else:
                     reply = "Ei tietoa :/"
