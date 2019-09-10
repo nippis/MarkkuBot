@@ -125,7 +125,7 @@ class CommandRouter():
 
                     if date_diff.seconds > 3600 and date_diff.days == 0:
                         reply += " ({} tuntia sitten)".format(date_diff.seconds//3600)
-                    else if date_diff.days != 0:
+                    elif date_diff.days != 0:
                         reply += " ({} päivää ja {} tuntia sitten)".format(date_diff.days, date_diff.seconds//3600)
 
                 else:
