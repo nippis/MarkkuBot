@@ -5,28 +5,6 @@ import psycopg2
 
 class DatabasePsql:
     def __init__(self):
-        db_name = environ["POSTGRES_DB"]
-        db_user = environ["POSTGRES_USER"]
-        db_pass = environ["POSTGRES_PASSWORD"]
-        db_host = "db"
-        self.table_name = "name"
-        self.table_counter = "counter"
-        self.table_word = "word"
-        self.table_blacklist = "blacklist"
-
-        self.conn = psycopg2.connect(
-            dbname=db_name,
-            user=db_user,
-            password=db_pass,
-            host=db_host,
-        )
-
-        self.cursor = self.conn.cursor()
-
-        # luodaan tarvittavat taulut jos niitä ei ole
-        markkuschema = open("markku.sql", "r")
-        self.cursor.execute(markkuschema.read())
-
         self.counters = [
             "messages",
             "kiitos",
@@ -36,29 +14,55 @@ class DatabasePsql:
             "commands",
         ]
 
+    def open_connection(self):
+        db_name = environ["POSTGRES_DB"]
+        db_user = environ["POSTGRES_USER"]
+        db_pass = environ["POSTGRES_PASSWORD"]
+        db_host = "db"
+        self.table_name = "name"
+        self.table_counter = "counter"
+        self.table_word = "word"
+        self.table_blacklist = "blacklist"
+
+        conn = psycopg2.connect(
+            dbname=db_name,
+            user=db_user,
+            password=db_pass,
+            host=db_host,
+        )
+
+        # TODO: testaa onko legit yhteys
+
+        return conn
+
     def get_counters(self):
         return self.counters
 
 
     def in_blacklist(self, user_id):
+
+        conn = self.open_connection()
+
         sql =   "SELECT 1 " \
                 "FROM {} " \
                 "WHERE user_id = {};"
 
-        self.cursor.execute(sql.format(self.table_blacklist, user_id))
+        conn.cursor.execute(sql.format(self.table_blacklist, user_id))
 
-        return self.cursor.fetchone() is not None
+        return conn.cursor.fetchone() is not None
 
 
     def update_name(self, id, name):
+        conn = self.open_connection()
+
         sql =   "INSERT INTO {0} (id, name) " \
                 "VALUES ({1}, '{2}') " \
                 "ON CONFLICT (id) DO UPDATE " \
                 "SET name = '{2}';"        
 
-        self.cursor.execute(sql.format(self.table_name, id, name))
+        conn.cursor.execute(sql.format(self.table_name, id, name))
 
-        self.conn.commit()
+        conn.conn.commit()
 
 
     def add_blacklist(self, user_id):
