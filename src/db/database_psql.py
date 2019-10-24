@@ -49,7 +49,11 @@ class DatabasePsql:
 
         conn.cursor.execute(sql.format(self.table_blacklist, user_id))
 
-        return conn.cursor.fetchone() is not None
+        blacklisted = conn.cursor.fetchone() is not None
+
+        conn.close()
+
+        return blacklisted
 
 
     def update_name(self, id, name):
@@ -62,10 +66,13 @@ class DatabasePsql:
 
         conn.cursor.execute(sql.format(self.table_name, id, name))
 
-        conn.conn.commit()
+        conn.commit()
+        conn.close()
 
 
     def add_blacklist(self, user_id):
+        conn = self.open_connection()
+
         sql =   "INSERT INTO {0} " \
                 "VALUES ({4});" \
                 " " \
@@ -76,46 +83,58 @@ class DatabasePsql:
                 "DELETE FROM {3} " \
                 "WHERE user_id={4}; " \
         
-        self.cursor.execute(sql.format(self.table_blacklist, self.table_name, self.table_counter, self.table_word, user_id))
+        conn.cursor.execute(sql.format(self.table_blacklist, self.table_name, self.table_counter, self.table_word, user_id))
 
-        self.conn.commit()
+        conn.commit()
+        conn.close()
 
 
     def remove_blacklist(self, user_id):
+        conn = self.open_connection()
+
         sql =   "DELETE from {} " \
                 "WHERE user_id = {};"
 
-        self.cursor.execute(sql.format(self.table_blacklist, user_id))
-        self.conn.commit()
+        conn.cursor.execute(sql.format(self.table_blacklist, user_id))
+        conn.commit()
+        conn.close()
 
 
+    # inkrementoidaan. Jossei riviä ole, lisätään se
     def increment_counter(self, user_id, chat_id, counter, amount):
-        # inkrementoidaan, jossei riviä ole, lisätään se
+        conn = self.open_connection()
 
         sql =   "INSERT INTO {0} (user_id, chat_id, {1}) " \
                 "VALUES ({2}, {3}, {4}) " \
                 "ON CONFLICT (user_id, chat_id) DO UPDATE " \
                 "SET {1} = {0}.{1} + {4};"
 
-        self.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
-        self.conn.commit()
+        conn.cursor.execute(sql.format(self.table_counter, counter, user_id, chat_id, amount))
+        conn.commit()
+        conn.close()
 
 
+    # palauttaa käyttäjä, chätti parin laskurin
     def get_counter_user(self, user_id, chat_id, counter):
-        # palauttaa käyttäjä, chätti parin laskurin
+        conn = self.open_connection()
 
         sql =   "SELECT {} " \
                 "FROM {} " \
                 "WHERE user_id = {} AND chat_id = {};"
 
-        self.cursor.execute(sql.format(counter, self.table_counter, user_id, chat_id))
+        conn.cursor.execute(sql.format(counter, self.table_counter, user_id, chat_id))
+
+        pari = conn.cursor.fetchone()[0]
+
+        conn.close()
         
-        return self.cursor.fetchone()[0]
+        return pari
 
 
+    # nimitaulusta nimet, countterista laskurin arvo
+    # kursori antaa ne tupleina -> muutetaan dictiin ja palautetaan
     def get_counter_top(self, chat_id, counter, top_amount):
-        # nimitaulusta nimet, countterista laskurin arvo
-        # kursori antaa ne tupleina -> muutetaan dictiin ja palautetaan
+        conn = self.open_connection()
 
         sql =   "SELECT {0}.{2}, {1}.name " \
                 "FROM {0} " \
@@ -126,37 +145,29 @@ class DatabasePsql:
                 "ORDER BY {0}.{2} DESC " \
                 "LIMIT {4};"
 
-        self.cursor.execute(sql.format(self.table_counter, self.table_name, counter, chat_id, top_amount))
+        conn.cursor.execute(sql.format(self.table_counter, self.table_name, counter, chat_id, top_amount))
 
-        res = self.cursor.fetchall()
+        res = conn.cursor.fetchall()
+
+        conn.close()
 
         return dict((y, x) for x, y in res)
 
         
+    # user, chat, sana yhdistelmät uniikkeja
+    # jos ei löydy -> lisätään, jos löytyy, lisätään amount counttiin
     def word_collection_add(self, user_id, chat_id, word, amount):
-        # user, chat, sana yhdistelmät uniikkeja
-        # jos ei löydy -> lisätään, jos löytyy, lisätään amount counttiin
+        conn = self.open_connection()
 
         sql =   "INSERT INTO {0} (user_id, chat_id, word, count) " \
                 "VALUES ({1}, {2}, '{3}', {4}) " \
                 "ON CONFLICT (user_id, chat_id, word) DO UPDATE " \
                 "SET count = {0}.count + {4}; "
 
-        self.cursor.execute(sql.format(self.table_word, user_id, chat_id, word, amount))
-        self.conn.commit()
+        conn.cursor.execute(sql.format(self.table_word, user_id, chat_id, word, amount))
+        conn.commit()
+        conn.close()
 
-
-    def word_collection_get_chat(self, chat_id):
-        # TODO tätä ei käytetä vielä missään, en tiedä miten pitäisi tehdä
-
-        sql = "select * from word where chat_id = {};"
-        self.cursor.execute(sql.format(chat_id))
-
-        return self.cursor.fetchall()
-
-
-    def word_collection_get_chat_user(self, chat_id, user_id):
-        pass
 
 if __name__ == "__main__":
     asd = DatabasePsql()
