@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from os import environ
+from environs import Env
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (BaseFilter, CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler)
@@ -38,6 +39,9 @@ def add_param(funcToCall, paramToPass):
     return localFunction
 
 def main():
+    env = Env()
+    env.read_env()
+    
     updater = Updater(token=environ["TG_TOKEN"])
     handlers(updater)
 
