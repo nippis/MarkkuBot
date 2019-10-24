@@ -20,16 +20,18 @@ class DatabasePsql:
         db_pass = environ["POSTGRES_PASSWORD"]
         db_host = environ["POSTGRES_HOST"]
         db_port = environ["POSTGRES_PORT"]
-        self.table_name = "name"
-        self.table_counter = "counter"
-        self.table_word = "word"
-        self.table_blacklist = "blacklist"
+
+        self.table_name = environ["POSTGRES_TABLE_NAME"]
+        self.table_counter = environ["POSTGRES_TABLE_COUNTER"]
+        self.table_word = environ["POSTGRES_TABLE_WORD"]
+        self.table_blacklist = environ["POSTGRES_TABLE_BLACKLIST"]
 
         conn = psycopg2.connect(
             dbname=db_name,
             user=db_user,
             password=db_pass,
             host=db_host,
+            port=db_port    
         )
 
         # TODO: testaa onko legit yhteys
