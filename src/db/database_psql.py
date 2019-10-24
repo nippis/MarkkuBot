@@ -18,7 +18,7 @@ class DatabasePsql:
         db_name = environ["POSTGRES_DB"]
         db_user = environ["POSTGRES_USER"]
         db_pass = environ["POSTGRES_PASSWORD"]
-        db_host = "db"
+        db_host = environ["POSTGRES_HOST"]
         self.table_name = "name"
         self.table_counter = "counter"
         self.table_word = "word"
