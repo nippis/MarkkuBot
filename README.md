@@ -15,7 +15,7 @@ Markkua voi tämän jälkeen ajaa joko lokaalisti `markku.py` tiedoston kautta t
 
 Markun image rakennetaan komennolla `docker build -t markkubot:latest .`.
 
-Tietokantaimage ladataan tuotantokoneelle komennolla `docker pull postgresql`, minkä jälkeen kontin saa ajoon komennolla `sudo docker run --rm --name MarkkuDB --d -p 5432:5432 -v <polku lokaaliin volumeen>:/var/lib/postgresql/data postgres`.
+Tietokantaimage ladataan tuotantokoneelle komennolla `docker pull postgresql`, minkä jälkeen kontin saa ajoon komennolla `sudo docker run --rm --name MarkkuDB -d -p 5432:5432 -v <polku lokaaliin volumeen>:/var/lib/postgresql/data postgres`.
 
 Itse botin kontin saa ajoon komennolla `sudo docker run -d --network="host" --name MarkkuBot --restart on-failure markkubot`.
 
