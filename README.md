@@ -17,7 +17,7 @@ Markun image rakennetaan komennolla `docker build -t markkubot:latest .`.
 
 Tietokantaimage ladataan tuotantokoneelle komennolla `docker pull postgresql`, minkä jälkeen kontin saa ajoon komennolla `sudo docker run --rm --name MarkkuDB --d -p 5432:5432 -v <polku lokaaliin volumeen>:/var/lib/postgresql/data postgres`.
 
-Itse botin kontin saa ajoon komennolla `sudo docker run --network="host" --name --restart on-failure markkubot`.
+Itse botin kontin saa ajoon komennolla `sudo docker run -d --network="host" --name MarkkuBot --restart on-failure markkubot`.
 
 ### .env
 
