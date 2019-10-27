@@ -34,17 +34,21 @@ class DatabasePsql:
             port=db_port    
         )
 
-        # TODO: testaa onko legit yhteys
+        if conn.closed == 0:
+            return conn
+        else:
+            return False
 
-        return conn
 
     def get_counters(self):
         return self.counters
 
 
     def in_blacklist(self, user_id):
-
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "SELECT 1 " \
@@ -62,6 +66,9 @@ class DatabasePsql:
 
     def update_name(self, id, name):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "INSERT INTO {0} (id, name) " \
@@ -77,6 +84,9 @@ class DatabasePsql:
 
     def add_blacklist(self, user_id):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "INSERT INTO {0} " \
@@ -97,6 +107,9 @@ class DatabasePsql:
 
     def remove_blacklist(self, user_id):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "DELETE from {} " \
@@ -110,6 +123,9 @@ class DatabasePsql:
     # inkrementoidaan. Jossei riviä ole, lisätään se
     def increment_counter(self, user_id, chat_id, counter, amount):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "INSERT INTO {0} (user_id, chat_id, {1}) " \
@@ -125,6 +141,9 @@ class DatabasePsql:
     # palauttaa käyttäjä, chätti parin laskurin
     def get_counter_user(self, user_id, chat_id, counter):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "SELECT {} " \
@@ -144,6 +163,9 @@ class DatabasePsql:
     # kursori antaa ne tupleina -> muutetaan dictiin ja palautetaan
     def get_counter_top(self, chat_id, counter, top_amount):
         conn = self.open_connection()
+        if conn == False:
+            return
+
         cursor = conn.cursor()
 
         sql =   "SELECT {0}.{2}, {1}.name " \
@@ -168,6 +190,9 @@ class DatabasePsql:
     # jos ei löydy -> lisätään, jos löytyy, lisätään amount counttiin
     def word_collection_add(self, user_id, chat_id, word, amount):
         conn = self.open_connection()
+        if conn == False:
+            return
+            
         cursor = conn.cursor()
 
         sql =   "INSERT INTO {0} (user_id, chat_id, word, count) " \
