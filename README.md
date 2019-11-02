@@ -8,42 +8,26 @@ Markun toteutus on siirretty Dockerissa pyöriväksi. Vaikka Markkua pystyy edel
 
 ### Kehitys
 
-Kehitys onnistuu helpoiten komennolla `docker-compose up --build` tai `docker-compose up --build -d` jos haluat ajaa detached-tilassa. 
+Posgresql lokaalisti tai konttiin pyörimään ja sinne tarvittavat taulut, käyttäjä ja oikeudet käyttäjälle.
+Markkua voi tämän jälkeen ajaa joko lokaalisti `markku.py` tiedoston kautta tai kontissa.  
 
 ### Tuotanto
 
-*Tähän saadaan toivottavasti automatisointi jatkossa.*
+Markun image rakennetaan komennolla `docker build -t markkubot:latest .`.
 
-Markun image rakennetaan komennolla `docker build -t markkubot:x.x.x .`, missä x.x.x on uusi versionumero. Tarkista nykyinen komennolla `docker ps`. Tämä numero pitää kirjoittaa myös docker-compose.yml tiedostoon.
+Tietokantaimage ladataan tuotantokoneelle komennolla `docker pull postgresql`, minkä jälkeen kontin saa ajoon komennolla `sudo docker run --rm --name MarkkuDB -d -p 5432:5432 -v <polku lokaaliin volumeen>:/var/lib/postgresql/data postgres`.
 
-Tuotantokoneella Markkua kannattaa ajaa stackina eli komennolla
-`docker stack deploy -c docker-compose.yml --resolve-image never markku`,
-missä `-c` kertoo docker-compose -filun polun, `--resolve-image never` ei tarkista ajettavia imageja Docker Hubista (jos imaget lokaalisti buildattuja) ja viimeinen parametri asettaa stackille nimen, tässä tapauksessa "markku". Stackin päivittäminen tapahtuu samalla komennolla.
-
-Ylläoleva komento on kirjoitettu valmiiksi update.sh tiedostoon. 
+Itse botin kontin saa ajoon komennolla `sudo docker run -d --network="host" --name MarkkuBot --restart on-failure markkubot`.
 
 ### .env
 
-env-tiedostossa Markulle tärkeät jutut (keksi sopivat nimet itse, esim. `markku_chats_collection` jne.):
-
-```
-TG_TOKEN=<telegramin bot token>
-DB_NAME=<tietokannan nimi>
-CHATS_COLL_NAME=<tietokannan chat-collectionin nimi>
-WORDS_COLL_NAME=<tietokannan sana-collectionin nimi>
-BLACKLIST_COLL_NAME=<tietokannan blacklist-collectionin nimi>
-SENSOR_API_ADDRESS=<pimiödatan api:n osoite>
-```
+Kopsaa `.env.sample` ja nimeä uudelleen `.env`:iksi. Kirjoittele sinne fiksuja arvoja.
 
 ## Huomattavaa
 
 Muista uuden botin privacy mode pois.
 
-HUOM: Samasta koodiversiosta myös tägi githubiin samalla versionumerolla, `git tag -a x.x.x -m "x.x.x" && git push --tags`, `-a` tekee annotoidun tagin (joka on ihan hyvä olla) ja tällöin sille joutuu heittämään jonkun viestin.
-
 ## ROADMAP
 
-* PostgreSQL
 * Githubista automatisoidut Docker-buildit: https://docs.docker.com/docker-hub/github/#github-organizations
-* Tuotantoon joku haistelija, joka hakee uusimman buildin Docker Hubista ja käynnistää Markun uudelleen
 

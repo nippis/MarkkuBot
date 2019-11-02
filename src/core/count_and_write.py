@@ -15,4 +15,4 @@ def count_and_write(db, update, var):
     if db.in_blacklist(user_id):
         return
 
-    db.increment_counter(user_id, chat_id, var, 1, update.message.chat.title, username)
+    db.increment_counter(user_id, chat_id, var, 1)

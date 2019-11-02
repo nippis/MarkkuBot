@@ -10,6 +10,8 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Kopioi tarvittavat tiedostot src:n alle
 COPY src /src
+COPY markku.sql /src
+COPY .env /src
 
 # Aja markku, kun container käynnistetään
 CMD ["python", "markku.py"]

@@ -11,9 +11,31 @@ class MessageRouter():
     def __init__(self, db):
         self.db = db
 
-    def msg_text(self, bot, update):
-        printlog(update, "text")
+        self.commands = {
+            "msg_sticker": self.msg_sticker,
+            "msg_text": self.msg_text,
+            "msg_photo": self.msg_photo,
+            "msg_gif": self.msg_gif,
+            "status_new_members": self.status_new_members
+        }
 
+    def route_command(self, bot, update, command, args):
+        printlog(update, command)
+
+        username = update.message.from_user.username
+        chat_title = update.message.chat.title
+        user_id, chat_id = get_ids(update)
+
+        if username is not None:
+            self.db.update_name(user_id, username)
+
+        if chat_title is not None:
+            self.db.update_name(chat_id, chat_title)
+
+        if command in self.commands:
+            self.commands[command](bot, update)
+
+    def msg_text(self, bot, update):
         _, chat_id = get_ids(update)
         count_and_write(self.db, update, "messages")
 
@@ -52,18 +74,14 @@ class MessageRouter():
             bot.send_message(chat_id=chat_id, text="Filmi best")
 
     def msg_gif(self, bot, update):
-        printlog(update, "gif")
         count_and_write(self.db, update, "gifs")
 
     def msg_photo(self, bot, update):
-        printlog(update, "photo")
         count_and_write(self.db, update, "photos")
         
     def msg_sticker(self, bot, update):
-        printlog(update, "sticker")
         count_and_write(self.db, update, "stickers")
 
     def status_new_members(self, bot, update):
-        printlog(update, "new member")
         msg = camera_versus_text()
         update.message.reply_text(msg)

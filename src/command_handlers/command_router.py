@@ -21,8 +21,44 @@ class CommandRouter():
         self.db = db
         self.last_command = {}
 
+        self.commands = {
+            "/start": self.start,
+            "/stats": self.stats,
+            "/darkroom": self.darkroom,
+            "/help": self.help,
+            "/noutaja": self.noutaja,
+            "/topten": self.topten,
+            "/protip": self.protip,
+            "/blacklist": self.add_blacklist,
+            "/unblacklist": self.remove_blacklist
+        }
+
+    def get_commands(self):
+        # yllä olevat komennot
+        coms = self.commands.keys()
+
+        # poistetaan '/' edestä 
+        return [x[1:] for x in coms]
+
+    def route_command(self, bot, update, args=[]):
+        message = update.message.text.split(" ")[0]
+
+        printlog(update, message)
+        count_and_write(self.db, update, "commands")
+
+        if message in self.commands:
+            self.commands[message](bot, update, args)
+
+
     def on_timeout(self, user_id, chat_id):
         current_time = time.time()
+
+        # testihommia nämä
+        return False
+
+        # privassa saa spämmii
+        if user_id == chat_id:
+            return False
 
         if (user_id, chat_id) in self.last_command and self.last_command[(user_id, chat_id)] + 60 > current_time:
             return True
@@ -30,20 +66,13 @@ class CommandRouter():
             self.last_command[(user_id, chat_id)] = current_time
             return False
 
-    def start(self, bot, update):
-        printlog(update, "start")
-
+    def start(self, bot, update, args):
         _, chat_id = get_ids(update) # Ignoraa user_id, tätä käytetään paljon
-        count_and_write(self.db, update, "commands")
 
         bot.send_message(chat_id=chat_id, text="Woof woof")
 
-    def stats(self, bot, update):
-        printlog(update, "stats")
-
+    def stats(self, bot, update, args):
         user_id, chat_id = get_ids(update)
-
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -70,7 +99,11 @@ class CommandRouter():
 
         for counter in user_counters:
             if counter == "kiitos":
-                msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
+                if user_counters["messages"] != 0:
+                    msg += "\n└ {}% Kiitosta".format(round(user_counters[counter] / user_counters["messages"] * 100, 1) )
+                else:
+                    msg += "\n└ ??% Kiitosta"
+
 
             else:
                 msg += "\n{:<10}{:>5} ({:>4}%)".format(counter.capitalize() + ":",
@@ -82,11 +115,8 @@ class CommandRouter():
         bot.send_message(chat_id=chat_id, text=msg, parse_mode='HTML')
 
     # Lukee netistä valosensorin datan ja kertoo onko kerhohuoneella valot päällä
-    def darkroom(self, bot, update):
-        printlog(update, "darkroom")
-
+    def darkroom(self, bot, update, args):
         user_id, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -136,11 +166,8 @@ class CommandRouter():
             print(e.reason)
             bot.send_message(chat_id=chat_id, text="Ei ny onnistunu (%s)" % e.reason)
 
-    def help(self, bot, update):
-        printlog(update, "help")
-
+    def help(self, bot, update, args):
         user_id, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -160,11 +187,8 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=reply, parse_mode='HTML')            
 
-    def noutaja(self, bot, update):
-        printlog(update, "noutaja")
-
+    def noutaja(self, bot, update, args):
         user_id, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -181,10 +205,7 @@ class CommandRouter():
             bot.sendPhoto(chat_id=chat_id, photo=picture_link)
 
     def topten(self, bot, update, args):
-        printlog(update, "topten")
-
         user_id, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -208,11 +229,8 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=text)
 
-    def protip(self, bot, update):
-        printlog(update, "protip")
-
+    def protip(self, bot, update, args):
         user_id, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         if self.on_timeout(user_id, chat_id):
             return
@@ -223,18 +241,13 @@ class CommandRouter():
 
         bot.send_message(chat_id=chat_id, text=protip_list[protip_index])
 
-    def camera_versus(self, bot, update):
-        printlog(update, "camera versus")
-
+    def camera_versus(self, bot, update, args):
         _, chat_id = get_ids(update)
-        count_and_write(self.db, update, "commands")
 
         msg = camera_versus_text()
         bot.send_message(chat_id=chat_id, text=msg)
 
-    def add_blacklist(self, bot, update):
-        printlog(update, "blacklist")
-
+    def add_blacklist(self, bot, update, args):
         user_id, _ = get_ids(update)
 
         if (update.message.chat.type != "private"):
@@ -259,7 +272,7 @@ class CommandRouter():
                                 "and add your user to the \"do not track\" list?",
                                 reply_markup=reply_markup)
 
-    def remove_blacklist(self, bot, update):
+    def remove_blacklist(self, bot, update, args):
         user_id, _ = get_ids(update)
 
         if (update.message.chat.type != "private"):
