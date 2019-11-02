@@ -43,6 +43,10 @@ class CommandRouter():
     def route_command(self, bot, update, args=[]):
         message = update.message.text.split(" ")[0]
 
+        #poistetaan '@MarkkuBot' komennosta jos löytyy
+        if "@MarkkuBot" in message:
+            message.replace("@MarkkuBot", "")
+
         printlog(update, message)
         count_and_write(self.db, update, "commands")
 
