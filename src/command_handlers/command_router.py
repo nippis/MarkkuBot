@@ -57,9 +57,6 @@ class CommandRouter():
     def on_timeout(self, user_id, chat_id):
         current_time = time.time()
 
-        # testihommia nämä
-        return False
-
         # privassa saa spämmii
         if user_id == chat_id:
             return False
