@@ -45,7 +45,7 @@ class CommandRouter():
 
         #poistetaan '@<BotUsername>' komennosta jos löytyy
         print(message)
-        if "@LilMarkkuBot" in message:
+        if "@" in message:
             message = message.split("@", 1)[0]
 
         print(message)
