@@ -110,7 +110,6 @@ tips = [
     "Muiden filmiperiä ei avata ilman lupaa!",
     "Lämmitä kehite suljetussa astiassa. Vituttaa kun keitinlasi kaatuu vesihauteeseen.",
     "Sunny16 on se, kun aurinko paistaa niin, että silmiin sattuu. Sit, jos ei satu, stoppi vähemmän.",
-    "Kaikki kuvat f/1.4 niin ei paska näy.",
     "Ei ikinä Sastamalaan ilman kamerakalustoa",
     "Skumppapullo on muuten paljon helpompi pitää kuvatessa kädessä kuin tuoppi.",
     "Kannattaa retkuu ennen naimisia.",
